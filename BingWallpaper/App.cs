@@ -31,7 +31,7 @@ namespace BingWallpaper
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlite("Data Source = Employee.db");
+                options.UseSqlite(Configuration.GetConnectionString("Sqlite"));
             });
 
             services.AddSingleton<MainWindow>();
