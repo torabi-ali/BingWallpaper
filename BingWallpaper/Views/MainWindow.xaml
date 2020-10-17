@@ -10,8 +10,6 @@
         helpers:DialogCloser.DialogResult="{Binding CloseWindowFlag}"
         mc:Ignorable="d"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -25,7 +23,7 @@
                 <materialDesign:Snackbar x:Name="snackbar" MessageQueue="{Binding MessageQueue}" />
             </Grid>
         </materialDesign:DialogHost>
-        
+
         <Grid>
             <GroupBox Header="Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Width="130" Height="440">
                 <ListView ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}">
