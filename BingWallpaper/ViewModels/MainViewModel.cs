@@ -2,13 +2,10 @@
 using BingWallpaper.Data;
 using BingWallpaper.Helpers;
 using BingWallpaper.Models;
-using BingWallpaper.Views;
 using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace BingWallpaper.ViewModels
 {
@@ -21,12 +18,11 @@ namespace BingWallpaper.ViewModels
         private ImageInfo _selectedImage;
         public ImageInfo SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
 
-        private static readonly ApplicationDbContext ApplicationDbContext = new ApplicationDbContext();
+        private static readonly ApplicationDbContext _dbContext = new ApplicationDbContext();
         #endregion
 
         #region Commands
         public RelayCommand SetWallpaperCommand { get; set; }
-        public RelayCommand SettingCommand { get; set; }
         public RelayCommand AboutCommand { get; set; }
         public RelayCommand CloseCommand { get; set; }
         #endregion
@@ -41,41 +37,23 @@ namespace BingWallpaper.ViewModels
 
             #region Commands
             SetWallpaperCommand = new RelayCommand(SetWallpaper);
-            SettingCommand = new RelayCommand(Setting);
             AboutCommand = new RelayCommand(About);
             CloseCommand = new RelayCommand(Close);
             #endregion
 
-            Task.Run(() => Initialize());
+            Initialize();
         }
 
         public void Initialize()
         {
             MessageQueue.Enqueue("Loading Wallpapers ...");
 
-            var wait = 0;
-            while (Properties.Settings.Default.WaitForNetwork)
-            {
-                if (wait < 5)
-                {
-                    Thread.Sleep(1000); //wait for the new image to add
-                    wait++;
-                }
-                else
-                {
-                    MessageQueue.Enqueue("There is a problem with Internet Connection");
-                    break;
-                }
-            }
-
-            var images = ApplicationDbContext.GetImagesRange();
+            var images = _dbContext.ImageInfos.Where(p => p.Date >= DateTime.Today.AddDays(-7));
             foreach (var image in images)
             {
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    Images.Add(image);
-                });
+                Images.Add(image);
             }
+
             SelectedImage = Images.FirstOrDefault();
         }
 
@@ -83,12 +61,6 @@ namespace BingWallpaper.ViewModels
         {
             MessageQueue.Enqueue("Trying to Set Wallpaper.");
             BingWallpaperDownloader.SetWallpaper(SelectedImage);
-        }
-
-        private void Setting(object parameter)
-        {
-            SettingWindow setting = new SettingWindow();
-            setting.Show();
         }
 
         private void About(object parameter)

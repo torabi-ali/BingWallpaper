@@ -10,7 +10,7 @@ namespace BingWallpaper.Helpers
     public static class LogException
     {
         private static readonly string FILE_NAME = $"{Application.ResourceAssembly.GetName().Name}.log";
-        private static readonly string FILE_PATH = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\{Properties.Settings.Default.CompanyName}";
+        private static readonly string FILE_PATH = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\BingWallpaper";
         private static readonly string FULL_FILE_PATH = $"{FILE_PATH}\\{FILE_NAME}";
 
         public static void Log(this Exception ex)

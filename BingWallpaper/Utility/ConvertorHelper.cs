@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -24,7 +22,7 @@ namespace BingWallpaper.Utility
 
         public static string ToImageName(this DateTime dateTime)
         {
-            return dateTime.ToShortDateString().Replace('/', '-');
+            return dateTime.ToString("yyyy-MM-dd");
         }
 
         public static string ConvertToString(DateTime value)
@@ -55,8 +53,7 @@ namespace BingWallpaper.Utility
                 result = Convert.ToInt32(obj);
             }
             catch
-            {
-            }
+            { }
             return result;
         }
 
@@ -249,19 +246,17 @@ namespace BingWallpaper.Utility
 
             string Temp = null;
 
-            int i = 0;
-
             if ((price[0].Length % 3) >= 1)
             {
                 Temp = price[0].Substring(0, (price[0].Length % 3));
-                for (i = 0; i <= (price[0].Length / 3) - 1; i++)
+                for (int i = 0; i <= (price[0].Length / 3) - 1; i++)
                 {
                     Temp += "," + price[0].Substring((price[0].Length % 3) + (i * 3), 3);
                 }
             }
             else
             {
-                for (i = 0; i <= (price[0].Length / 3) - 1; i++)
+                for (int i = 0; i <= (price[0].Length / 3) - 1; i++)
                 {
                     Temp += price[0].Substring((price[0].Length % 3) + (i * 3), 3) + ",";
                 }
@@ -328,58 +323,6 @@ namespace BingWallpaper.Utility
             }
 
             return new DataView(table);
-        }
-
-        public static DataTable ExcelToTable(this string filePath)
-        {
-            DataTable dt = new DataTable();
-
-            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(filePath, false))
-            {
-                //Read the first Sheet from Excel file.
-                Sheet sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
-
-                //Get the Worksheet instance.
-                Worksheet worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
-
-                //Fetch all the rows present in the Worksheet.
-                IEnumerable<Row> rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
-
-                //Loop through the Worksheet rows.
-                foreach (Row row in rows)
-                {
-                    //Use the first row to add columns to DataTable.
-                    if (row.RowIndex.Value == 1)
-                    {
-                        foreach (Cell cell in row.Descendants<Cell>())
-                        {
-                            dt.Columns.Add(GetValue(doc, cell));
-                        }
-                    }
-                    else
-                    {
-                        //Add rows to DataTable.
-                        dt.Rows.Add();
-                        int i = 0;
-                        foreach (Cell cell in row.Descendants<Cell>())
-                        {
-                            dt.Rows[dt.Rows.Count - 1][i] = GetValue(doc, cell);
-                            i++;
-                        }
-                    }
-                }
-                return dt;
-            }
-        }
-
-        private static string GetValue(SpreadsheetDocument doc, Cell cell)
-        {
-            string value = cell.CellValue?.InnerText;
-            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
-            {
-                return doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
-            }
-            return value;
         }
 
         public static string ToCSV<T>(this IEnumerable<T> instance)

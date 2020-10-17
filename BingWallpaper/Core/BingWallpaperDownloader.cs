@@ -65,6 +65,7 @@ namespace BingWallpaper.Core
                 var bingImage = xmlData.DeserializeXml<images>();
                 imageInfo.Url = $"https://bing.com{bingImage.image.url}";
                 imageInfo.Copyright = $"Copytight: {bingImage.image.copyright}";
+                imageInfo.Date = DateTime.Today.AddDays(-1 * index);
 
                 using (var client = new WebClient())
                 {

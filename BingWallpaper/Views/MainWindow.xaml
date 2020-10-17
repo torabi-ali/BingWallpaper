@@ -9,14 +9,13 @@
         DataContext="{DynamicResource MainViewModel}"
         helpers:DialogCloser.DialogResult="{Binding CloseWindowFlag}"
         mc:Ignorable="d"
-        Icon="/Resource/logo.ico"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        Title="Bing Wallpaper" Name="mainWindow" Height="575" Width="900">
+        Title="Bing Wallpaper" Name="mainWindow" Height="575" Width="900" ResizeMode="NoResize">
     <Window.Resources>
         <vm:MainViewModel x:Key="MainViewModel" />
     </Window.Resources>
@@ -26,9 +25,9 @@
                 <materialDesign:Snackbar x:Name="snackbar" MessageQueue="{Binding MessageQueue}" />
             </Grid>
         </materialDesign:DialogHost>
-
+        
         <Grid>
-            <GroupBox Header="Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Height="440">
+            <GroupBox Header="Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Width="130" Height="440">
                 <ListView ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -37,7 +36,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </GroupBox>
-            <GroupBox Header="Selected Image" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="1">
+            <GroupBox Header="Selected Image" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="100" Width="700" Grid.Row="0" Grid.Column="1">
                 <StackPanel Orientation="Vertical">
                     <Image Source="{Binding SelectedImage.Path}" Height="360" Width="640" />
                     <TextBox Text="{Binding SelectedImage.Copyright, UpdateSourceTrigger=PropertyChanged}" Width="640" IsReadOnly="True" />
@@ -45,12 +44,12 @@
             </GroupBox>
         </Grid>
 
-        <Button Command="{Binding CloseCommand}" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Style="{StaticResource MaterialDesignRaisedLightButton}" />
-        <StackPanel Orientation="Horizontal" Margin="0,125,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button Command="{Binding AboutCommand}" Content="{materialDesign:PackIcon Information}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="25" Height="25" Margin="0,0,5,0" ToolTip="Information" Style="{StaticResource MaterialDesignFloatingActionAccentButton}"/>
-            <Button Command="{Binding SettingCommand}" Content="{materialDesign:PackIcon Settings}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="25" Height="25" Margin="5,0,0,0" ToolTip="Setting" Style="{StaticResource MaterialDesignFloatingActionButton}"/>
-        </StackPanel>
-        <Button Command="{Binding SetWallpaperCommand}" Content="Set Wallpaper" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="125"  Style="{StaticResource MaterialDesignRaisedAccentButton}" />
+        <Button Command="{Binding CloseCommand}" Content="Close" ToolTip="Close application" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Width="100" Style="{StaticResource MaterialDesignRaisedLightButton}" />
 
+        <StackPanel Orientation="Horizontal" Margin="0,125,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button Command="{Binding AboutCommand}" Content="{materialDesign:PackIcon Information}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="25" Height="25" Margin="0,0,5,0" ToolTip="Information" Style="{StaticResource MaterialDesignIconButton}"/>
+        </StackPanel>
+
+        <Button Command="{Binding SetWallpaperCommand}" Content="Set Wallpaper" ToolTip="Set current image as wallpaper" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Width="125" Style="{StaticResource MaterialDesignRaisedAccentButton}" />
     </Grid>
 </Window>
