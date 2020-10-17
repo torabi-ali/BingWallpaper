@@ -4,6 +4,8 @@
              Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
+            <vm:ViewModelLocator xmlns:vm="clr-namespace:BingWallpaper.ViewModels" x:Key="Locator" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
