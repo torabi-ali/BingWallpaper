@@ -10,7 +10,7 @@ namespace BingWallpaper.Core
 {
     public static class BingWallpaperDownloader
     {
-        public static bool SetWallpaper(ImageInfo imageInfo)
+        public static bool SetWallpaper(ApplicationImage imageInfo)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace BingWallpaper.Core
             }
         }
 
-        public static bool SetLockScreen(ImageInfo imageInfo)
+        public static bool SetLockScreen(ApplicationImage imageInfo)
         {
             try
             {
@@ -38,9 +38,9 @@ namespace BingWallpaper.Core
             }
         }
 
-        public static List<ImageInfo> GetWallpapers(int days = 1)
+        public static List<ApplicationImage> GetWallpapers(int days = 1)
         {
-            List<ImageInfo> result = new List<ImageInfo>();
+            List<ApplicationImage> result = new List<ApplicationImage>();
             for (int i = 0; i < days; i++)
             {
                 result.Add(DownloadBingImage(i));
@@ -49,10 +49,10 @@ namespace BingWallpaper.Core
             return result;
         }
 
-        private static ImageInfo DownloadBingImage(int index = 0)
+        private static ApplicationImage DownloadBingImage(int index = 0)
         {
             var source = $"http://www.bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
-            ImageInfo imageInfo = new ImageInfo();
+            ApplicationImage imageInfo = new ApplicationImage();
             string xmlData;
 
             using (var xmlClient = new WebClient { Encoding = Encoding.UTF8 })

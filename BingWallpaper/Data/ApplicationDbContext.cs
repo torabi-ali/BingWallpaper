@@ -1,26 +1,18 @@
 ﻿using BingWallpaper.Models;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
-using System.Reflection;
 
 namespace BingWallpaper.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string DbName = Assembly.GetExecutingAssembly().GetName().Name;
-        private static readonly string DbPath = "D:/";
-        private static readonly string DbFullPath = Path.Combine(DbPath, $"{DbName}.db");
-
-        public DbSet<ImageInfo> ImageInfos { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            options.UseSqlite($"Data Source={DbFullPath}");
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ImageInfo>(entity =>
+            modelBuilder.Entity<ApplicationImage>(entity =>
             {
                 entity.HasKey(p => p.Id);
                 entity.HasIndex(p => p.Date);
@@ -28,5 +20,9 @@ namespace BingWallpaper.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+        #region DbSets
+        public DbSet<ApplicationImage> Images { get; set; }
+        #endregion
     }
 }

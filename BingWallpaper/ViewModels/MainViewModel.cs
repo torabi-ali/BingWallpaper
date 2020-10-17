@@ -13,12 +13,12 @@ namespace BingWallpaper.ViewModels
     {
         #region Fields
         public SnackbarMessageQueue MessageQueue { get; set; }
-        public ObservableCollection<ImageInfo> Images { get; set; }
+        public ObservableCollection<ApplicationImage> Images { get; set; }
 
-        private ImageInfo _selectedImage;
-        public ImageInfo SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
+        private ApplicationImage _selectedImage;
+        public ApplicationImage SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
 
-        private static readonly ApplicationDbContext _dbContext = new ApplicationDbContext();
+        private readonly ApplicationDbContext _dbContext;
         #endregion
 
         #region Commands
@@ -27,12 +27,14 @@ namespace BingWallpaper.ViewModels
         public RelayCommand CloseCommand { get; set; }
         #endregion
 
-        public MainViewModel()
+        public MainViewModel(ApplicationDbContext dbContext)
         {
+            _dbContext = dbContext;
+
             #region Fields
             MessageQueue = new SnackbarMessageQueue();
-            Images = new ObservableCollection<ImageInfo>();
-            SelectedImage = new ImageInfo();
+            Images = new ObservableCollection<ApplicationImage>();
+            SelectedImage = new ApplicationImage();
             #endregion
 
             #region Commands
@@ -48,7 +50,7 @@ namespace BingWallpaper.ViewModels
         {
             MessageQueue.Enqueue("Loading Wallpapers ...");
 
-            var images = _dbContext.ImageInfos.Where(p => p.Date >= DateTime.Today.AddDays(-7));
+            var images = _dbContext.Images.Where(p => p.Date >= DateTime.Today.AddDays(-7));
             foreach (var image in images)
             {
                 Images.Add(image);

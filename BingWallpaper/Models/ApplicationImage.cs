@@ -3,7 +3,7 @@ using System;
 
 namespace BingWallpaper.Models
 {
-    public class ImageInfo : BaseEntity
+    public class ApplicationImage : BaseEntity
     {
         public string Name => $"{Date.ToImageName()}.jpg";
         public DateTime Date { get; set; }

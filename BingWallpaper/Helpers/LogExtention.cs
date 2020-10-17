@@ -1,7 +1,7 @@
-﻿using Serilog;
+﻿using Microsoft.Extensions.Configuration;
+using Serilog;
 using Serilog.Core;
 using System;
-using System.IO;
 
 namespace BingWallpaper.Helpers
 {
@@ -9,19 +9,17 @@ namespace BingWallpaper.Helpers
     {
         #region Properties
         public static readonly Logger Logger;
-
-        private static readonly string LogName = "Log-";
-        private static readonly string LogPath = "D:/Logs";
-        private static readonly string LogFullPath = Path.Combine(LogPath, $"{LogName}.txt");
         #endregion
 
         #region Ctor
         static LogExtention()
         {
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+
             Logger = new LoggerConfiguration()
-                .WriteTo.File(LogFullPath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30)
-                .MinimumLevel.Debug()
+                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
+
         }
         #endregion
 
