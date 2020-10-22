@@ -38,12 +38,17 @@ namespace BingWallpaper.Core
             }
         }
 
-        public static List<ApplicationImage> GetWallpapers(int days = 1)
+        public static List<ApplicationImage> GetWallpapers(DateTime lastDownloadDate)
         {
+            var days = (DateTime.Today - lastDownloadDate).Days;
             List<ApplicationImage> result = new List<ApplicationImage>();
             for (int i = 0; i < days; i++)
             {
-                result.Add(DownloadBingImage(i));
+                var image = DownloadBingImage(i);
+                if (image != null)
+                {
+                    result.Add(image);
+                }
             }
 
             return result;

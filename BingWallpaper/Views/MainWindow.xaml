@@ -12,7 +12,7 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        Title="Bing Wallpaper" Name="mainWindow" Height="575" Width="900" ResizeMode="NoResize">
+        Title="Bing Wallpaper" Name="mainWindow" Height="575" Width="1000" ResizeMode="NoResize">
 
     <Grid Margin="20">
         <md:DialogHost SnackbarMessageQueue="{Binding ElementName=snackbar, Path=MessageQueue}" Margin="0,75,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="1000" >
@@ -22,19 +22,19 @@
         </md:DialogHost>
 
         <Grid>
-            <GroupBox Header="Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Width="130" Height="440">
-                <ListView ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}">
+            <GroupBox Header="Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Width="200" Height="400">
+                <ListView ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}" Margin="5">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Path}" ToolTip="{Binding Name}"  Height="72" Width="128" />
+                            <Image Source="{Binding Path}" ToolTip="{Binding Name}"  Height="75" Width="134" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </GroupBox>
-            <GroupBox Header="Selected Image" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="100" Width="700" Grid.Row="0" Grid.Column="1">
+            <GroupBox Header="Selected Image" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="100" Width="700" Height="400" Grid.Row="0" Grid.Column="1">
                 <StackPanel Orientation="Vertical">
-                    <Image Source="{Binding SelectedImage.Path}" Height="360" Width="640" />
-                    <TextBox Text="{Binding SelectedImage.Copyright, UpdateSourceTrigger=PropertyChanged}" Width="640" IsReadOnly="True" />
+                    <Image Source="{Binding SelectedImage.Path}" Height="324" Width="576" />
+                    <TextBox Text="{Binding SelectedImage.Copyright, UpdateSourceTrigger=PropertyChanged}" Width="675" IsReadOnly="True" />
                 </StackPanel>
             </GroupBox>
         </Grid>

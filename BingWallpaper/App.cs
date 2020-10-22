@@ -1,4 +1,5 @@
-﻿using BingWallpaper.Data;
+﻿using BingWallpaper.Core;
+using BingWallpaper.Data;
 using BingWallpaper.ViewModels;
 using BingWallpaper.Views;
 using Microsoft.EntityFrameworkCore;
