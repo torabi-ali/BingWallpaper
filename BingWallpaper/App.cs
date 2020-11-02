@@ -1,5 +1,5 @@
-﻿using BingWallpaper.Core;
-using BingWallpaper.Data;
+﻿using BingWallpaper.Data;
+using BingWallpaper.Models;
 using BingWallpaper.ViewModels;
 using BingWallpaper.Views;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +38,10 @@ namespace BingWallpaper
             services.AddScoped<MainViewModel>();
 
             services.AddScoped<MainWindow>();
+
+            var config = new AppSettings();
+            Configuration.Bind("AppSettings", config);
+            services.AddSingleton(config);
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

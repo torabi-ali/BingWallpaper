@@ -2,9 +2,9 @@
 using BingWallpaper.Models;
 using BingWallpaper.Utility;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BingWallpaper.Core
 {
@@ -38,23 +38,7 @@ namespace BingWallpaper.Core
             }
         }
 
-        public static List<ApplicationImage> GetWallpapers(DateTime lastDownloadDate)
-        {
-            var days = (DateTime.Today - lastDownloadDate).Days;
-            List<ApplicationImage> result = new List<ApplicationImage>();
-            for (int i = 0; i < days; i++)
-            {
-                var image = DownloadBingImage(i);
-                if (image != null)
-                {
-                    result.Add(image);
-                }
-            }
-
-            return result;
-        }
-
-        private static ApplicationImage DownloadBingImage(int index = 0)
+        public static ApplicationImage DownloadBingImage(int index = 0)
         {
             var source = $"http://www.bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
             ApplicationImage imageInfo = new ApplicationImage();
@@ -75,6 +59,38 @@ namespace BingWallpaper.Core
                 using (var client = new WebClient())
                 {
                     client.DownloadFile(imageInfo.Url, imageInfo.Path);
+                }
+
+                return imageInfo;
+            }
+            catch (Exception ex)
+            {
+                ex.Log();
+                return null;
+            }
+        }
+
+        public static async Task<ApplicationImage> DownloadBingImageAsync(int index = 0)
+        {
+            var source = $"http://www.bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
+            ApplicationImage imageInfo = new ApplicationImage();
+            string xmlData;
+
+            using (var xmlClient = new WebClient { Encoding = Encoding.UTF8 })
+            {
+                xmlData = await xmlClient.DownloadStringTaskAsync(source);
+            }
+
+            try
+            {
+                var bingImage = xmlData.DeserializeXml<images>();
+                imageInfo.Url = $"https://bing.com{bingImage.image.url}";
+                imageInfo.Copyright = $"Copytight: {bingImage.image.copyright}";
+                imageInfo.Date = DateTime.Today.AddDays(-1 * index);
+
+                using (var client = new WebClient())
+                {
+                    await client.DownloadFileTaskAsync(imageInfo.Url, imageInfo.Path);
                 }
 
                 return imageInfo;

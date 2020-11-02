@@ -3,10 +3,12 @@ using BingWallpaper.Data;
 using BingWallpaper.Helpers;
 using BingWallpaper.Models;
 using MaterialDesignThemes.Wpf;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BingWallpaper.ViewModels
 {
@@ -50,19 +52,21 @@ namespace BingWallpaper.ViewModels
             #endregion
 
             Initialize();
-            DownloadLatestImages();
         }
 
-        private void Initialize()
+        public async Task Initialize()
         {
             MessageQueue.Enqueue("Loading Wallpapers ...");
 
-            var tmpImages = _dbContext.Images.Where(p => p.Date >= DateTime.Today.AddDays(-7));
+            var tmpImages = await _dbContext.Images.Where(p => p.Date >= DateTime.Today.AddDays(-7)).ToListAsync();
             foreach (var item in tmpImages)
             {
                 Images.Add(item);
             }
+
+            await DownloadLatestImagesAsync();
         }
+
 
         private void SetWallpaper(object parameter)
         {
@@ -72,6 +76,7 @@ namespace BingWallpaper.ViewModels
 
         private void About(object parameter)
         {
+            MessageQueue.Enqueue("BingWallpaper by Ali Torabi.");
         }
 
         private void Close(object parameter)
@@ -79,18 +84,22 @@ namespace BingWallpaper.ViewModels
             CloseWindow();
         }
 
-        private void DownloadLatestImages()
+        private async Task DownloadLatestImagesAsync()
         {
-            var tmpImages = BingWallpaperDownloader.GetWallpapers(LastDownloadDate);
-            foreach (var item in tmpImages)
+            var days = (DateTime.Today - LastDownloadDate).Days;
+            for (int i = 0; i < days; i++)
             {
-                _dbContext.Images.Add(item);
-                Images.Add(item);
+                var image = await BingWallpaperDownloader.DownloadBingImageAsync(i);
+                if (image != null)
+                {
+                    _dbContext.Images.Add(image);
+                    Images.Add(image);
+                }
             }
 
-            if (tmpImages.Any())
+            if (days > 0)
             {
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 _configuration["LastDownloadDate"] = DateTime.Today.ToShortDateString();
             }
 
