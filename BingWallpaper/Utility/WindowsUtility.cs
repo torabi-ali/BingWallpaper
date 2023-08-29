@@ -7,13 +7,13 @@ namespace BingWallpaper.Utility
 {
     public static class WindowsUtility
     {
-        private static readonly string ProgramName = Assembly.GetExecutingAssembly().GetName().Name;
+        private static readonly string _programName = Assembly.GetExecutingAssembly().GetName().Name;
 
         public static WindowsVersion GetWindowsVersion()
         {
             var os = Environment.OSVersion;
             var vs = os.Version;
-            WindowsVersion operatingSystem = WindowsVersion.Windows10;
+            var operatingSystem = WindowsVersion.Windows10;
             if (os.Platform == PlatformID.Win32Windows)
             {
                 switch (vs.Minor)
@@ -109,13 +109,13 @@ namespace BingWallpaper.Utility
             }
         }
 
-        public static void CopyAll(string SourcePath, string DestinationPath)
+        public static void CopyAll(string sourcePath, string destinationPath)
         {
             try
             {
-                if (!Directory.Exists(DestinationPath))
+                if (!Directory.Exists(destinationPath))
                 {
-                    Directory.CreateDirectory(DestinationPath);
+                    Directory.CreateDirectory(destinationPath);
                 }
             }
             catch (Exception)
@@ -124,14 +124,14 @@ namespace BingWallpaper.Utility
             }
 
 
-            foreach (string dirPath in Directory.GetDirectories(SourcePath, "*", SearchOption.AllDirectories))
+            foreach (var dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
             {
-                Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
             }
 
-            foreach (string newPath in Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories))
+            foreach (var newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
             {
-                File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath), true);
+                File.Copy(newPath, newPath.Replace(sourcePath, destinationPath), true);
             }
         }
 
@@ -139,13 +139,13 @@ namespace BingWallpaper.Utility
         public static void EnableRunOnStartup()
         {
             var rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            rkApp?.SetValue(ProgramName, Assembly.GetExecutingAssembly().Location);
+            rkApp?.SetValue(_programName, Assembly.GetExecutingAssembly().Location);
         }
 
         public static void DisableRunOnStartup()
         {
             var rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            rkApp?.DeleteValue(ProgramName, false);
+            rkApp?.DeleteValue(_programName, false);
         }
         #endregion
 

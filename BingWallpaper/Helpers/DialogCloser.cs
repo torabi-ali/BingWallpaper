@@ -9,8 +9,7 @@ namespace BingWallpaper.Helpers
 
         private static void DialogResultChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Window window = d as Window;
-            if (window != null)
+            if (d is Window window)
             {
                 window.Close();
             }

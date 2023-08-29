@@ -8,8 +8,8 @@ namespace BingWallpaper.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private bool? _CloseWindowFlag;
-        private double _CurrentProgress;
+        private bool? _closeWindowFlag;
+        private double _currentProgress;
 
         internal void RaisePropertyChanged(string prop)
         {
@@ -18,19 +18,19 @@ namespace BingWallpaper.ViewModels
 
         public bool? CloseWindowFlag
         {
-            get => _CloseWindowFlag; set
+            get => _closeWindowFlag; set
             {
-                _CloseWindowFlag = value;
+                _closeWindowFlag = value;
                 RaisePropertyChanged(nameof(CloseWindowFlag));
             }
         }
 
         public double CurrentProgress
         {
-            get => _CurrentProgress;
+            get => _currentProgress;
             set
             {
-                _CurrentProgress = value;
+                _currentProgress = value;
                 RaisePropertyChanged(nameof(CurrentProgress));
             }
         }

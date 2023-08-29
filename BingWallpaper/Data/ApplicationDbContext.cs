@@ -1,6 +1,4 @@
-﻿using BingWallpaper.Helpers;
-using BingWallpaper.Models;
-using System;
+﻿using BingWallpaper.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -14,14 +12,14 @@ namespace BingWallpaper.Data
     [DbConfigurationType(typeof(SQLiteConfiguration))]
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string DbName = Assembly.GetExecutingAssembly().GetName().Name;
-        private static readonly string DbPath = Properties.Settings.Default.FolderPath;
-        private static readonly string DbFullPath = Path.Combine(DbPath, $"{DbName}.sqlite");
+        private static readonly string _dbName = Assembly.GetExecutingAssembly().GetName().Name;
+        private static readonly string _dbPath = Properties.Settings.Default.FolderPath;
+        private static readonly string _dbFullPath = Path.Combine(_dbPath, $"{_dbName}.sqlite");
 
         public ApplicationDbContext()
             : base(new SQLiteConnection()
             {
-                ConnectionString = new SQLiteConnectionStringBuilder() { DataSource = DbFullPath, ForeignKeys = true }.ConnectionString
+                ConnectionString = new SQLiteConnectionStringBuilder() { DataSource = _dbFullPath, ForeignKeys = true }.ConnectionString
             }, true)
         { }
 
@@ -65,7 +63,7 @@ namespace BingWallpaper.Data
         {
             var sql = "CREATE TABLE IF NOT EXISTS 'ImageInfo' ('Id' INTEGER PRIMARY KEY AUTOINCREMENT, 'Name' TEXT, 'Url' TEXT, 'Copyright' TEXT);";
 
-            var dbConnection = new SQLiteConnection($"Data Source={DbFullPath};Version=3;");
+            var dbConnection = new SQLiteConnection($"Data Source={_dbFullPath};Version=3;");
             dbConnection.Open();
             var command = new SQLiteCommand(sql, dbConnection);
 
@@ -73,10 +71,8 @@ namespace BingWallpaper.Data
             {
                 command.ExecuteNonQuery();
             }
-            catch (Exception ex)
-            {
-                ex.Log();
-            }
+            catch
+            { }
         }
     }
 }

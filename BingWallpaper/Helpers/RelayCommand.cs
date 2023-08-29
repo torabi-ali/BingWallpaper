@@ -23,7 +23,7 @@ namespace BingWallpaper.Helpers
         #region ICommand Members
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public event EventHandler CanExecuteChanged

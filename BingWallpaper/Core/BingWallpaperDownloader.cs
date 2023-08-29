@@ -1,5 +1,4 @@
-﻿using BingWallpaper.Helpers;
-using BingWallpaper.Models;
+﻿using BingWallpaper.Models;
 using BingWallpaper.Utility;
 using System;
 using System.Collections.Generic;
@@ -17,9 +16,8 @@ namespace BingWallpaper.Core
                 NativeMethods.SetWallpaper(imageInfo.Path);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ex.Log();
                 return false;
             }
         }
@@ -31,17 +29,16 @@ namespace BingWallpaper.Core
                 NativeMethods.SetLockScreen(imageInfo.Path);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ex.Log();
                 return false;
             }
         }
 
         public static List<ImageInfo> GetWallpapers(int days = 1)
         {
-            List<ImageInfo> result = new List<ImageInfo>();
-            for (int i = 0; i < days; i++)
+            var result = new List<ImageInfo>();
+            for (var i = 0; i < days; i++)
             {
                 result.Add(DownloadBingImage(i));
             }
@@ -52,7 +49,7 @@ namespace BingWallpaper.Core
         private static ImageInfo DownloadBingImage(int index = 0)
         {
             var source = $"http://www.bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
-            ImageInfo imageInfo = new ImageInfo();
+            var imageInfo = new ImageInfo();
             string xmlData;
 
             using (var xmlClient = new WebClient { Encoding = Encoding.UTF8 })
@@ -73,9 +70,8 @@ namespace BingWallpaper.Core
 
                 return imageInfo;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ex.Log();
                 return null;
             }
         }

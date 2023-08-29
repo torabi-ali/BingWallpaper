@@ -21,7 +21,7 @@ namespace BingWallpaper.ViewModels
         private ImageInfo _selectedImage;
         public ImageInfo SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
 
-        private static readonly ApplicationDbContext ApplicationDbContext = new ApplicationDbContext();
+        private static readonly ApplicationDbContext _applicationDbContext = new ApplicationDbContext();
         #endregion
 
         #region Commands
@@ -68,7 +68,7 @@ namespace BingWallpaper.ViewModels
                 }
             }
 
-            var images = ApplicationDbContext.GetImagesRange();
+            var images = _applicationDbContext.GetImagesRange();
             foreach (var image in images)
             {
                 Application.Current.Dispatcher.Invoke(delegate
@@ -87,7 +87,7 @@ namespace BingWallpaper.ViewModels
 
         private void Setting(object parameter)
         {
-            SettingWindow setting = new SettingWindow();
+            var setting = new SettingWindow();
             setting.Show();
         }
 

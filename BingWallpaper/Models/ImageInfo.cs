@@ -5,11 +5,11 @@ namespace BingWallpaper.Models
 {
     public class ImageInfo : BaseEntity
     {
-        private static readonly string FileExt = WindowsUtility.GetSuitableBackgroundFormat();
+        private static readonly string _fileExt = WindowsUtility.GetSuitableBackgroundFormat();
 
         public ImageInfo()
         {
-            Name = $"{DateTime.Today.ToImageName()}.{FileExt}";
+            Name = $"{DateTime.Today.ToImageName()}.{_fileExt}";
         }
 
         public string Name { set; get; }

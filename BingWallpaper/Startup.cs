@@ -13,7 +13,7 @@ namespace BingWallpaper
 {
     public partial class App : Application
     {
-        private readonly ApplicationDbContext ApplicationDbContext = new ApplicationDbContext();
+        private readonly ApplicationDbContext _applicationDbContext = new ApplicationDbContext();
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
@@ -54,8 +54,8 @@ namespace BingWallpaper
             var imageInfo = BingWallpaperDownloader.GetWallpapers(1).FirstOrDefault();
             if (imageInfo != null)
             {
-                ApplicationDbContext.AddNewImage(imageInfo);
-                ApplicationDbContext.SaveChangesAsync();
+                _applicationDbContext.AddNewImage(imageInfo);
+                _applicationDbContext.SaveChangesAsync();
             }
 
             Settings.Default.WaitForNetwork = false;
