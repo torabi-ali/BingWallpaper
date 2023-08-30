@@ -45,4 +45,4 @@ The project originally was written by .NET Framework. I tried to migrate to .NET
 <!-- LICENSE -->
 ## License
 
-This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute this codebase according to the terms and conditions of the license.
+This project is licensed under the [MIT License](LICENSE.txt). Feel free to use, modify, and distribute this codebase according to the terms and conditions of the license.
