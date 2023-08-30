@@ -5,6 +5,8 @@ using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System.IO;
 using System.Windows;
 using Wpf.Utility;
@@ -72,6 +74,12 @@ namespace Wpf
             });
 
             services.AddHttpClient();
+
+            services.AddLogging(logBuilder =>
+            {
+                logBuilder.SetMinimumLevel(LogLevel.Information);
+                logBuilder.AddNLog("NLog.config");
+            });
 
             var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
             services.AddSingleton(applicationSettings);
