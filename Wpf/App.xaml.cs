@@ -31,23 +31,31 @@ namespace Wpf
             var services = new ServiceCollection();
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
+
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
         private async void App_Startup(object sender, StartupEventArgs e)
         {
+            var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+
             var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
             if (settings.RunOnStartup)
             {
                 NativeMethods.EnableRunOnStartup(settings.ApplicationName);
+                logger.LogInformation("Enable run on startup");
             }
             else
             {
                 NativeMethods.DisableRunOnStartup(settings.ApplicationName);
+                logger.LogInformation("Disable run on startup");
             }
 
             if (!Directory.Exists(settings.BasePath))
             {
                 Directory.CreateDirectory(settings.BasePath);
+                logger.LogInformation("Create base path directory");
             }
 
             await DownloadTodayImageAsync();
@@ -77,18 +85,26 @@ namespace Wpf
 
             services.AddLogging(logBuilder =>
             {
-                logBuilder.SetMinimumLevel(LogLevel.Information);
+                logBuilder.ClearProviders();
                 logBuilder.AddNLog("NLog.config");
             });
 
             var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
             services.AddSingleton(applicationSettings);
 
-            services.AddTransient<IBingDownloaderService, BingDownloaderService>();
-            services.AddTransient<IImageService, ImageService>();
+            services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
+            services.AddSingleton<IImageService, ImageService>();
 
-            services.AddTransient<MainViewModel>();
-            services.AddTransient<MainWindow>();
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<MainWindow>();
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+
+            var ex = (Exception)e.ExceptionObject;
+            logger.LogError(ex, "");
         }
     }
 }
