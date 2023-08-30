@@ -16,7 +16,7 @@ namespace Wpf
     public partial class App : Application
     {
         public static IServiceProvider ServiceProvider { get; private set; }
-        public static SnackbarMessageQueue MessageQueue = new SnackbarMessageQueue();
+        public static SnackbarMessageQueue MessageQueue { get; private set; }
 
         private readonly IConfiguration _config;
 
@@ -24,8 +24,9 @@ namespace Wpf
         {
             _config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            var services = new ServiceCollection();
+            MessageQueue = new SnackbarMessageQueue();
 
+            var services = new ServiceCollection();
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
         }
@@ -53,7 +54,7 @@ namespace Wpf
             window.Show();
         }
 
-        private async Task DownloadTodayImageAsync()
+        private static async Task DownloadTodayImageAsync()
         {
             MessageQueue.Enqueue("Downloading New Wallpaper ...");
 
@@ -77,7 +78,7 @@ namespace Wpf
 
             services.AddTransient<IBingDownloaderService, BingDownloaderService>();
             services.AddTransient<IImageService, ImageService>();
-            
+
             services.AddTransient<MainViewModel>();
             services.AddTransient<MainWindow>();
         }

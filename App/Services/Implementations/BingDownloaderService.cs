@@ -40,8 +40,7 @@ namespace App.Services.Implementations
 
             using var xmlContentStream = await xmlResponse.Content.ReadAsStreamAsync();
             var serializer = new XmlSerializer(typeof(BingImagesDto));
-            var bingImages = serializer.Deserialize(xmlContentStream) as BingImagesDto;
-            if (bingImages is null)
+            if (serializer.Deserialize(xmlContentStream) is not BingImagesDto bingImages)
             {
                 throw new Exception();
             }

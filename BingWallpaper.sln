@@ -8,12 +8,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{183F270E-C0B1-4764-9AA4-657C0C92B351}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8207DEAB-1DEF-4D3B-80BD-2C843ACFFEDF}"
-	ProjectSection(SolutionItems) = preProject
-		Resource\logo.ico = Resource\logo.ico
-		Resource\logo.png = Resource\logo.png
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

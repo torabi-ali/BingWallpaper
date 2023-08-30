@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace Wpf.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         private bool? _closeWindowFlag;
-        private double _currentProgress;
 
         internal void RaisePropertyChanged(string prop)
         {
@@ -24,22 +22,9 @@ namespace Wpf.ViewModels
             }
         }
 
-        public double CurrentProgress
-        {
-            get => _currentProgress;
-            set
-            {
-                _currentProgress = value;
-                RaisePropertyChanged(nameof(CurrentProgress));
-            }
-        }
-
         public virtual void CloseWindow(bool? result = true)
         {
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-            {
-                CloseWindowFlag = CloseWindowFlag == null ? true : !CloseWindowFlag;
-            }));
+            CloseWindowFlag = CloseWindowFlag == null ? true : !CloseWindowFlag;
         }
     }
 }

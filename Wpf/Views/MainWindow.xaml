@@ -27,7 +27,7 @@
         </materialDesign:DialogHost>
 
         <Grid>
-            <GroupBox Header="Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Height="440">
+            <GroupBox Header="Previous Images" HorizontalAlignment="left" VerticalAlignment="Top" Panel.ZIndex="100" Grid.Row="0" Grid.Column="0" Height="440">
                 <ListView ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

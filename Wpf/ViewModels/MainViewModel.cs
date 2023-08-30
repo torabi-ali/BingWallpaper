@@ -4,7 +4,6 @@ using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows;
 using Wpf.Helpers;
 using Wpf.Utility;
 
@@ -12,7 +11,7 @@ namespace Wpf.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public SnackbarMessageQueue MessageQueue => App.MessageQueue;
+        public static SnackbarMessageQueue MessageQueue => App.MessageQueue;
 
         public RelayCommand SetWallpaperCommand { get; set; }
 
@@ -22,40 +21,36 @@ namespace Wpf.ViewModels
 
         public RelayCommand CloseCommand { get; set; }
 
-        public ObservableCollection<ImageInfo> Images;
+        public ObservableCollection<ImageInfo> Images { get; set; }
 
-        private ImageInfo _selectedImage = new ImageInfo();
+        private ImageInfo _selectedImage = new();
         public ImageInfo SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
 
         public MainViewModel()
         {
-            Images = new ObservableCollection<ImageInfo>();
-
             SetWallpaperCommand = new RelayCommand(SetWallpaper);
             SettingCommand = new RelayCommand(Setting);
             AboutCommand = new RelayCommand(About);
             CloseCommand = new RelayCommand(Close);
 
-            //Task.WhenAll(Initialize());
-            Initialize().ConfigureAwait(false);
+            Initialize().Wait();
         }
 
         public async Task Initialize()
         {
             MessageQueue.Enqueue("Loading Wallpapers ...");
 
+            Images = new ObservableCollection<ImageInfo>();
+
             var imageService = App.ServiceProvider.GetRequiredService<IImageService>();
             var images = await imageService.GetImagesAsync();
             foreach (var image in images)
             {
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    Images.Add(image);
-                });
+                Images.Add(image);
             }
 
             SelectedImage = Images.FirstOrDefault();
-         
+
             MessageQueue.Clear();
         }
 
