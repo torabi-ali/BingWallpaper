@@ -24,7 +24,7 @@ namespace Wpf.ViewModels
 
         public virtual void CloseWindow(bool? result = true)
         {
-            CloseWindowFlag = CloseWindowFlag == null ? true : !CloseWindowFlag;
+            CloseWindowFlag = CloseWindowFlag is null ? true : !CloseWindowFlag;
         }
     }
 }
