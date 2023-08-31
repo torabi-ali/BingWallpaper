@@ -57,9 +57,12 @@ namespace Wpf
 
         private void ConfigureServices(ServiceCollection services)
         {
+            var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
+            services.AddSingleton(applicationSettings);
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+                options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")};");
             });
 
             services.AddHttpClient();
@@ -69,9 +72,6 @@ namespace Wpf
                 logBuilder.ClearProviders();
                 logBuilder.AddNLog("NLog.config");
             });
-
-            var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
-            services.AddSingleton(applicationSettings);
 
             services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
             services.AddSingleton<IImageService, ImageService>();
@@ -85,7 +85,7 @@ namespace Wpf
             var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
 
             var ex = (Exception)e.ExceptionObject;
-            logger.LogError(ex, "");
+            logger.LogError(ex, $"Error from snder: {sender}");
         }
     }
 }
