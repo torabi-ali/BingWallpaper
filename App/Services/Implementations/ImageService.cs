@@ -23,17 +23,19 @@ namespace App.Services.Implementations
             return _applicationDbContext.Images.OrderByDescending(p => p.CreatedOn).Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
         }
 
-        public async Task DownloadTodayImageAsync()
+        public async Task DownloadImagesAsync(int days)
         {
-            var imageInfo = await _bingDownloaderService.DownloadBingImageAsync(0);
-
-            if (imageInfo != null)
+            var imageInfos = _bingDownloaderService.GetWallpapers(days);
+            await foreach (var image in imageInfos)
             {
-                _applicationDbContext.Images.Add(imageInfo);
-                await _applicationDbContext.SaveChangesAsync();
-
-                _logger.LogInformation("Today image successfully downloaded");
+                if (image is not null)
+                {
+                    _applicationDbContext.Images.Add(image);
+                }
             }
+
+            await _applicationDbContext.SaveChangesAsync();
+            _logger.LogInformation("Today image successfully downloaded");
         }
     }
 }

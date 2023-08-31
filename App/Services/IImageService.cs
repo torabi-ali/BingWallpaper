@@ -6,6 +6,6 @@ namespace App.Services
     {
         Task<List<ImageInfo>> GetImagesAsync(int pageIndex = 0, int pageSize = 10);
 
-        Task DownloadTodayImageAsync();
+        Task DownloadImagesAsync(int days);
     }
 }
