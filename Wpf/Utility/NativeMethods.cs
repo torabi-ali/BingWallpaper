@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -19,42 +20,31 @@ namespace Wpf.Utility
             Fill = 10
         }
 
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(int hWnd, uint wMsg, uint wParam, uint lParam);
-
         public static void SetLockScreen(string wallpaper)
         {
-            try
-            {
-                Registry.SetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization", "LockScreenImage", wallpaper);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Console.WriteLine("Failed to update Policy Override. Ensure this user can write to 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization'.");
-            }
+            using var registryKey = Registry.CurrentUser.OpenSubKey(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", true);
+            registryKey.SetValue($"LockScreenImage", wallpaper);
         }
 
         public static void SetWallpaper(string wallpaper, WallpaperStyle wallpaperStyle = WallpaperStyle.Fill, bool tileWallpaper = false)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
-            {
-                key.SetValue(@"WallpaperStyle", ((int)wallpaperStyle).ToString());
-                key.SetValue(@"TileWallpaper", tileWallpaper ? 1.ToString() : 0.ToString());
-            }
+            using var registryKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true);
+            registryKey.SetValue(@"WallpaperStyle", ((int)wallpaperStyle).ToString());
+            registryKey.SetValue(@"TileWallpaper", tileWallpaper ? 1.ToString() : 0.ToString());
 
             SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, wallpaper, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
         }
 
-        public static void EnableRunOnStartup(string applicationName)
+        public static void EnableRunOnStartup()
         {
-            var rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            rkApp?.SetValue(applicationName, Assembly.GetExecutingAssembly().Location);
+            using var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            registryKey.SetValue(Assembly.GetExecutingAssembly().GetName().Name, Process.GetCurrentProcess().MainModule.FileName);
         }
 
-        public static void DisableRunOnStartup(string applicationName)
+        public static void DisableRunOnStartup()
         {
-            var rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            rkApp?.DeleteValue(applicationName, false);
+            using var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            registryKey.DeleteValue(Assembly.GetExecutingAssembly().GetName().Name, false);
         }
 
         #region Private Methods
