@@ -25,7 +25,8 @@ namespace App.Services.Implementations
 
         public async Task<ImageInfo> DownloadBingImageAsync(int index)
         {
-            var fileName = $"{DateTime.Today:yyyy-MM-dd}.jpg";
+            var createdOn = DateTime.Today.AddDays(-1 * index);
+            var fileName = $"{createdOn:yyyy-MM-dd}.jpg";
             var filePath = Path.Combine(_settings.BasePath, fileName);
             if (File.Exists(filePath))
             {
@@ -58,7 +59,7 @@ namespace App.Services.Implementations
                 Headline = bingImages.Image.Headline,
                 Url = bingImages.Image.Url,
                 Copyright = bingImages.Image.Copyright,
-                CreatedOn = DateTime.Now
+                CreatedOn = createdOn
             };
 
             using var fileContentStream = await fileResponse.Content.ReadAsStreamAsync();
