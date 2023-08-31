@@ -31,7 +31,7 @@
                 <ListView ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Path}" ToolTip="{Binding Headline}"  Height="72" Width="128" />
+                            <Image Source="{Binding Path}" ToolTip="{Binding CreatedOn, StringFormat=d}"  Height="72" Width="128" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
