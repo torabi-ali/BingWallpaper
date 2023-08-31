@@ -43,12 +43,12 @@ namespace Wpf
             var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
             if (settings.RunOnStartup)
             {
-                NativeMethods.EnableRunOnStartup(settings.ApplicationName);
+                NativeMethods.EnableRunOnStartup();
                 logger.LogInformation("Enable run on startup");
             }
             else
             {
-                NativeMethods.DisableRunOnStartup(settings.ApplicationName);
+                NativeMethods.DisableRunOnStartup();
                 logger.LogInformation("Disable run on startup");
             }
 
