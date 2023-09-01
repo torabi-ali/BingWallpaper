@@ -10,7 +10,6 @@ using System.IO;
 using System.Windows;
 using Wpf.Utility;
 using Wpf.ViewModels;
-using Wpf.Views;
 
 namespace Wpf
 {
@@ -27,6 +26,9 @@ namespace Wpf
             var services = new ServiceCollection();
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
+
+            var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.EnsureCreated();
 
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -77,7 +79,6 @@ namespace Wpf
             services.AddSingleton<IImageService, ImageService>();
 
             services.AddSingleton<MainViewModel>();
-            services.AddSingleton<MainWindow>();
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
