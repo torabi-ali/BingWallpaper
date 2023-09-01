@@ -25,7 +25,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About Bing Wallpaper
 
-This projcet is one of my oldest hobies. It downloads bing image everyday and stores it in a folder which you can make a slideshow with it in your windows theme settings. After a short period you're going to have an amazing wallpaper slideshow that never bores you.
+This project is a long-standing hobby of mine. It automatically downloads the Bing image of the day and saves it in a folder that you can use to create a slideshow for your Windows theme settings. After a short period, you will have an amazing wallpaper slideshow that never bores you.
 
 
 
@@ -34,6 +34,7 @@ This projcet is one of my oldest hobies. It downloads bing image everyday and st
 The project originally was written by .NET Framework. I tried to migrate to .NET 7 as a playground and have some fun with it which turned out supoer fun.
 
 
+* MVVM Architecture
 * .NET 7
 * SQLite
 * MaterialUI
