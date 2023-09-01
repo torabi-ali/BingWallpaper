@@ -14,6 +14,8 @@ namespace Wpf.ViewModels
     {
         private const int IMAGE_COUNT = 7;
 
+        private readonly IImageService _imageService;
+
         public static SnackbarMessageQueue MessageQueue { get; private set; }
 
         public RelayCommand SetWallpaperCommand { get; set; }
@@ -26,11 +28,12 @@ namespace Wpf.ViewModels
 
         public ObservableCollection<ImageInfo> Images { get; set; }
 
-        private ImageInfo _selectedImage = new();
+        private ImageInfo _selectedImage;
         public ImageInfo SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
 
         public MainViewModel()
         {
+            _imageService = App.ServiceProvider.GetRequiredService<IImageService>();
             Images = new ObservableCollection<ImageInfo>();
             MessageQueue = new SnackbarMessageQueue();
 
@@ -44,9 +47,9 @@ namespace Wpf.ViewModels
 
         public async void Initialize()
         {
-            await LoadImagesAsync();
+            await Task.Run(LoadImagesAsync);
 
-            await DownloadImagesAsync();
+            await Task.Run(DownloadImagesAsync);
         }
 
         private void SetWallpaper(object parameter)
@@ -88,8 +91,7 @@ namespace Wpf.ViewModels
         {
             MessageQueue.Enqueue("Loading Wallpapers ...");
 
-            var imageService = App.ServiceProvider.GetRequiredService<IImageService>();
-            var images = await imageService.GetImagesAsync(pageSize: IMAGE_COUNT);
+            var images = await _imageService.GetImagesAsync(pageSize: IMAGE_COUNT);
             foreach (var image in images)
             {
                 Application.Current.Dispatcher.Invoke(delegate
@@ -98,8 +100,12 @@ namespace Wpf.ViewModels
                 });
             }
 
-            Images = new ObservableCollection<ImageInfo>(Images.OrderByDescending(p => p.CreatedOn));
-            SelectedImage = Images.FirstOrDefault();
+            if (images.Count > 0)
+            {
+                Images = new ObservableCollection<ImageInfo>(Images.OrderByDescending(p => p.CreatedOn));
+                RaisePropertyChanged(nameof(Images));
+                SelectedImage = Images.FirstOrDefault();
+            }
 
             MessageQueue.Clear();
         }
@@ -108,20 +114,14 @@ namespace Wpf.ViewModels
         {
             MessageQueue.Enqueue("Downloading New Wallpapers ...");
 
-            var imageService = App.ServiceProvider.GetRequiredService<IImageService>();
             var lastImageDays = SelectedImage is null ? 0 : (DateTime.Today - SelectedImage.CreatedOn).Days;
             var bingImageAvailability = IMAGE_COUNT - Images.Count;
 
             var days = Math.Max(lastImageDays, bingImageAvailability);
             if (days > 0)
             {
-                MessageQueue.Enqueue("Downloading New Wallpapers ...");
-
-                await Task.Run(() => imageService.DownloadImagesAsync(days));
-
-                await Task.Run(LoadImagesAsync);
-
-                MessageQueue.Clear();
+                await _imageService.DownloadImagesAsync(days);
+                await LoadImagesAsync();
             }
 
             MessageQueue.Clear();
