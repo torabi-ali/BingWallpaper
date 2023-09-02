@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Wpf.ViewModels
+namespace Wpf.ViewModels;
+
+public class ViewModelLocator
 {
-    public class ViewModelLocator
-    {
-        public MainViewModel MainViewModel => App.ServiceProvider.GetRequiredService<MainViewModel>();
-    }
+    public MainViewModel MainViewModel => App.ServiceProvider.GetRequiredService<MainViewModel>();
 }

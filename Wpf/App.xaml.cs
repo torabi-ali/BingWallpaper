@@ -11,82 +11,81 @@ using System.Windows;
 using Wpf.Utility;
 using Wpf.ViewModels;
 
-namespace Wpf
+namespace Wpf;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public static IServiceProvider ServiceProvider { get; private set; }
+
+    private readonly IConfiguration _config;
+
+    public App()
     {
-        public static IServiceProvider ServiceProvider { get; private set; }
+        _config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-        private readonly IConfiguration _config;
+        var services = new ServiceCollection();
+        ConfigureServices(services);
+        ServiceProvider = services.BuildServiceProvider();
 
-        public App()
+        var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.EnsureCreated();
+
+        var currentDomain = AppDomain.CurrentDomain;
+        currentDomain.UnhandledException += CurrentDomain_UnhandledException;
+    }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+
+        var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
+        if (settings.RunOnStartup)
         {
-            _config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            ServiceProvider = services.BuildServiceProvider();
-
-            var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            dbContext.Database.EnsureCreated();
-
-            var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            NativeMethods.EnableRunOnStartup();
+            logger.LogInformation("Enable run on startup");
+        }
+        else
+        {
+            NativeMethods.DisableRunOnStartup();
+            logger.LogInformation("Disable run on startup");
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        if (!Directory.Exists(settings.BasePath))
         {
-            var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
-
-            var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
-            if (settings.RunOnStartup)
-            {
-                NativeMethods.EnableRunOnStartup();
-                logger.LogInformation("Enable run on startup");
-            }
-            else
-            {
-                NativeMethods.DisableRunOnStartup();
-                logger.LogInformation("Disable run on startup");
-            }
-
-            if (!Directory.Exists(settings.BasePath))
-            {
-                Directory.CreateDirectory(settings.BasePath);
-                logger.LogInformation("Create base path directory");
-            }
+            Directory.CreateDirectory(settings.BasePath);
+            logger.LogInformation("Create base path directory");
         }
+    }
 
-        private void ConfigureServices(ServiceCollection services)
+    private void ConfigureServices(ServiceCollection services)
+    {
+        var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
+        services.AddSingleton(applicationSettings);
+
+        services.AddDbContext<ApplicationDbContext>(options =>
         {
-            var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
-            services.AddSingleton(applicationSettings);
+            options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")};");
+        });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")};");
-            });
+        services.AddHttpClient();
 
-            services.AddHttpClient();
-
-            services.AddLogging(logBuilder =>
-            {
-                logBuilder.ClearProviders();
-                logBuilder.AddNLog("NLog.config");
-            });
-
-            services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
-            services.AddSingleton<IImageService, ImageService>();
-
-            services.AddSingleton<MainViewModel>();
-        }
-
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        services.AddLogging(logBuilder =>
         {
-            var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+            logBuilder.ClearProviders();
+            logBuilder.AddNLog("NLog.config");
+        });
 
-            var ex = (Exception)e.ExceptionObject;
-            logger.LogError(ex, $"Error from snder: {sender}");
-        }
+        services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
+        services.AddSingleton<IImageService, ImageService>();
+
+        services.AddSingleton<MainViewModel>();
+    }
+
+    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+
+        var ex = (Exception)e.ExceptionObject;
+        logger.LogError(ex, $"Error from snder: {sender}");
     }
 }

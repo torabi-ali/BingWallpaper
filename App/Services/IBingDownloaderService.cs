@@ -1,9 +1,8 @@
 ﻿using Data.Models;
 
-namespace App.Services
+namespace App.Services;
+
+public interface IBingDownloaderService
 {
-    public interface IBingDownloaderService
-    {
-        IAsyncEnumerable<ImageInfo> GetWallpapers(int days);
-    }
+    IAsyncEnumerable<ImageInfo> GetWallpapers(int days);
 }
