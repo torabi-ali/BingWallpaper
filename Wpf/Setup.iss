@@ -1,20 +1,23 @@
-﻿[Setup]
+﻿#define MyAppVersion "2.2.1"
+#define MyAppName "BingWallpaper"
+
+[Setup]
 AppId={{F1B1B91D-CFA3-498C-A858-2F6585F46CB7}
-AppName=BingWallpaper
-AppVersion=2.2.1
-AppVerName=BingWallpaper 2.2.1
+AppName={#MyAppName}
+AppVersion={#MyAppVersion}
+AppVerName="{#MyAppName} {#MyAppVersion}"
 AppPublisher=Ali Torabi
 AppPublisherURL=https://github.com/torabi-ali
 AppSupportURL=https://github.com/torabi-ali/BingWallpaper
 AppUpdatesURL=https://github.com/torabi-ali/BingWallpaper
-DefaultDirName={commonpf}\BingWallpaper
+DefaultDirName={commonpf}\{#MyAppName}
 ArchitecturesInstallIn64BitMode=x64
-DisableDirPage=yes
-DisableProgramGroupPage=yes
+DisableDirPage=auto
+DisableProgramGroupPage=auto
 OutputDir=Setup
-OutputBaseFilename=BingWallpaper-Setup
-Compression=lzma
+OutputBaseFilename={#MyAppName}-Setup
 SolidCompression=yes
+Compression=lzma2/ultra64
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -30,13 +33,13 @@ Name: "{app}"; Permissions: users-full
 Name: "{app}\Logs"; Permissions: users-full
 
 [Icons]
-Name: "{commonprograms}\BingWallpaper"; Filename: "{app}\BingWallpaper.exe"
-Name: "{commondesktop}\BingWallpaper"; Filename: "{app}\BingWallpaper.exe"; Tasks: desktopicon
+Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\BingWallpaper.exe"; Description: "{cm:LaunchProgram,BingWallpaper}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#MyAppName}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: files; Name: "{app}\BingWallpaper.db"
+Type: files; Name: "{app}\{#MyAppName}.db"
 Type: filesandordirs; Name: "{app}\Logs"
 
