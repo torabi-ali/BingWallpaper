@@ -49,7 +49,7 @@ public class MainViewModel : BaseViewModel
 
     public async void Initialize()
     {
-        await Task.Run(LoadImagesAsync);
+        await LoadImagesAsync();
 
         await Task.Run(DownloadImagesAsync);
     }

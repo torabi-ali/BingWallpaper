@@ -35,6 +35,6 @@ public class ImageService : IImageService
         }
 
         await _applicationDbContext.SaveChangesAsync();
-        _logger.LogInformation("Today image successfully downloaded");
+        _logger.LogInformation("Image successfully downloaded");
     }
 }

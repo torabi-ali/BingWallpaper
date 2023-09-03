@@ -28,7 +28,7 @@ public partial class App : Application
         ServiceProvider = services.BuildServiceProvider();
 
         var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.EnsureCreated();
+        dbContext.Database.Migrate();
 
         var currentDomain = AppDomain.CurrentDomain;
         currentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -86,6 +86,6 @@ public partial class App : Application
         var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
 
         var ex = (Exception)e.ExceptionObject;
-        logger.LogError(ex, $"Error from snder: {sender}");
+        logger.LogError(ex, $"Error from sender: {sender}");
     }
 }

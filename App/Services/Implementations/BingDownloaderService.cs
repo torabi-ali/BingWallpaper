@@ -33,23 +33,25 @@ public class BingDownloaderService : IBingDownloaderService
             return null;
         }
 
-        var xmlResponse = await _httpClient.GetAsync($"https://bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US");
+        var apiAddress = $"https://bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
+        var xmlResponse = await _httpClient.GetAsync(apiAddress);
         if (!xmlResponse.IsSuccessStatusCode)
         {
-            throw new Exception();
+            throw new Exception($"Error while downloading the xml file from {apiAddress}");
         }
 
         using var xmlContentStream = await xmlResponse.Content.ReadAsStreamAsync();
         var serializer = new XmlSerializer(typeof(BingImagesDto));
         if (serializer.Deserialize(xmlContentStream) is not BingImagesDto bingImages)
         {
-            throw new Exception();
+            throw new Exception($"Error while deserializing {apiAddress}");
         }
 
-        var fileResponse = await _httpClient.GetAsync($"https://bing.com{bingImages.Image.Url}");
+        var imageAddress = $"https://bing.com{bingImages.Image.Url}";
+        var fileResponse = await _httpClient.GetAsync(imageAddress);
         if (!fileResponse.IsSuccessStatusCode)
         {
-            throw new Exception();
+            throw new Exception($"Error while downloading the image from {imageAddress}");
         }
 
         var image = new ImageInfo
