@@ -1,4 +1,4 @@
-﻿#define MyAppVersion "2.2.1"
+﻿#define MyAppVersion "2.3.0"
 #define MyAppName "BingWallpaper"
 
 [Setup]
