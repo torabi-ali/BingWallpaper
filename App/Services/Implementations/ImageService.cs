@@ -25,16 +25,24 @@ public class ImageService : IImageService
 
     public async Task DownloadImagesAsync(int days)
     {
-        var imageInfos = _bingDownloaderService.GetWallpapers(days);
-        await foreach (var image in imageInfos)
+        var imageInfos = await _bingDownloaderService.GetWallpapers(days);
+        foreach (var image in imageInfos)
         {
-            if (image is not null)
+            var exists = await _applicationDbContext.Images.AnyAsync(p => p.Url.Equals(image.Url));
+            if (!exists)
             {
                 _applicationDbContext.Images.Add(image);
+                _logger.LogInformation($"Image added with url: {image.Url}");
+            }
+            else
+            {
+                _logger.LogInformation($"Image already exists with url: {image.Url}");
             }
         }
 
-        await _applicationDbContext.SaveChangesAsync();
-        _logger.LogInformation("Image successfully downloaded");
+        if (imageInfos.Count > 0)
+        {
+            await _applicationDbContext.SaveChangesAsync();
+        }
     }
 }

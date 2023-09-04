@@ -15,12 +15,19 @@ public class BingDownloaderService : IBingDownloaderService
         _httpClient = httpClient;
     }
 
-    public async IAsyncEnumerable<ImageInfo> GetWallpapers(int days)
+    public async Task<IList<ImageInfo>> GetWallpapers(int days)
     {
+        var result = new List<ImageInfo>();
         for (var i = 0; i < days; i++)
         {
-            yield return await DownloadBingImageAsync(i);
+            var image = await DownloadBingImageAsync(i);
+            if (image is not null)
+            {
+                result.Add(image);
+            }
         }
+
+        return result;
     }
 
     public async Task<ImageInfo> DownloadBingImageAsync(int index)

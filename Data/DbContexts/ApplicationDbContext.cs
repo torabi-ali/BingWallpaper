@@ -15,7 +15,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<ImageInfo>().Property(p => p.Headline).IsRequired().HasMaxLength(512);
         modelBuilder.Entity<ImageInfo>().Property(p => p.Url).IsRequired().HasMaxLength(1024);
         modelBuilder.Entity<ImageInfo>().Property(p => p.Copyright).IsRequired().HasMaxLength(2048);
-        modelBuilder.Entity<ImageInfo>().HasIndex(p => new { p.Headline, p.Url });
+        modelBuilder.Entity<ImageInfo>().HasIndex(p => new { p.Url });
     }
 
     public DbSet<ImageInfo> Images { get; set; }
