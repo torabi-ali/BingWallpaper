@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:Wpf.ViewModels"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
-        helpers:DialogCloser.DialogResult="{Binding CloseWindowFlag}"
+        helpers:CloseCommand.CloseCommand="{Binding CloseWindowFlag}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
