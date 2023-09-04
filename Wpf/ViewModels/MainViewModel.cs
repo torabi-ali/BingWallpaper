@@ -36,7 +36,6 @@ public class MainViewModel : BaseViewModel
     {
         _applicationSettings = App.ServiceProvider.GetRequiredService<ApplicationSettings>();
         _imageService = App.ServiceProvider.GetRequiredService<IImageService>();
-        Images = new ObservableCollection<ImageInfo>();
         MessageQueue = new SnackbarMessageQueue();
 
         SetWallpaperCommand = new RelayCommand(SetWallpaper);
@@ -93,6 +92,7 @@ public class MainViewModel : BaseViewModel
     {
         MessageQueue.Enqueue("Loading Wallpapers ...");
 
+        Images = new ObservableCollection<ImageInfo>();
         var images = await _imageService.GetImagesAsync(pageSize: _applicationSettings.InitialLoadingImageCount);
         foreach (var image in images)
         {
