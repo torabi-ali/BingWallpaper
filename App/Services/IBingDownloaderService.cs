@@ -4,5 +4,7 @@ namespace App.Services;
 
 public interface IBingDownloaderService
 {
-    Task<IList<ImageInfo>> GetWallpapers(int days);
+    Task<List<ImageInfo>> GetImagesPagedAsync(int pageIndex = 0, int pageSize = 10);
+
+    Task DownloadWallpapers(int days);
 }

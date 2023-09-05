@@ -15,7 +15,7 @@ public class MainViewModel : BaseViewModel
     private const int BING_IMAGE_AVAILABLE_DAYS = 7;
 
     private readonly ApplicationSettings _applicationSettings;
-    private readonly IImageService _imageService;
+    private readonly IBingDownloaderService _bingDownloaderService;
 
     public static SnackbarMessageQueue MessageQueue { get; private set; }
 
@@ -35,7 +35,7 @@ public class MainViewModel : BaseViewModel
     public MainViewModel()
     {
         _applicationSettings = App.ServiceProvider.GetRequiredService<ApplicationSettings>();
-        _imageService = App.ServiceProvider.GetRequiredService<IImageService>();
+        _bingDownloaderService = App.ServiceProvider.GetRequiredService<IBingDownloaderService>();
         MessageQueue = new SnackbarMessageQueue();
 
         SetWallpaperCommand = new RelayCommand(SetWallpaper);
@@ -93,7 +93,7 @@ public class MainViewModel : BaseViewModel
         MessageQueue.Enqueue("Loading Wallpapers ...");
 
         Images = new ObservableCollection<ImageInfo>();
-        var images = await _imageService.GetImagesAsync(pageSize: _applicationSettings.InitialLoadingImageCount);
+        var images = await _bingDownloaderService.GetImagesPagedAsync(pageSize: _applicationSettings.InitialLoadingImageCount);
         foreach (var image in images)
         {
             Application.Current.Dispatcher.Invoke(delegate
@@ -122,7 +122,7 @@ public class MainViewModel : BaseViewModel
 
         if (days > 0)
         {
-            await _imageService.DownloadImagesAsync(days);
+            await _bingDownloaderService.DownloadWallpapers(days);
             await LoadImagesAsync();
         }
 

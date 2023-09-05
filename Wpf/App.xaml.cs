@@ -76,7 +76,6 @@ public partial class App : Application
         });
 
         services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
-        services.AddSingleton<IImageService, ImageService>();
 
         services.AddSingleton<MainViewModel>();
     }
