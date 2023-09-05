@@ -15,7 +15,7 @@ ArchitecturesInstallIn64BitMode=x64
 DisableDirPage=auto
 DisableProgramGroupPage=auto
 OutputDir=Setup
-OutputBaseFilename={#MyAppName}-Setup
+OutputBaseFilename=Setup-{#MyAppName}-{#MyAppVersion}
 SolidCompression=yes
 Compression=lzma2/ultra64
 
