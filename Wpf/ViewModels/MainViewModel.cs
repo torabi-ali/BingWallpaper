@@ -57,7 +57,7 @@ public class MainViewModel : BaseViewModel
     {
         MessageQueue.Enqueue("Trying to Set Wallpaper.");
 
-        NativeMethods.SetWallpaper(SelectedImage.Name);
+        NativeMethods.SetWallpaper(SelectedImage.Path);
     }
 
     private void Setting(object parameter)
