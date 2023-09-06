@@ -25,6 +25,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Setup\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="logo.ico" />
