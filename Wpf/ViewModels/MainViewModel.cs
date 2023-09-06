@@ -43,10 +43,10 @@ public class MainViewModel : BaseViewModel
         AboutCommand = new RelayCommand(About);
         CloseCommand = new RelayCommand(Close);
 
-        Initialize();
+        InitializeAsync();
     }
 
-    public async void Initialize()
+    public async void InitializeAsync()
     {
         await LoadImagesAsync();
 

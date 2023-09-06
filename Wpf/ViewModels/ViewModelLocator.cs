@@ -4,5 +4,5 @@ namespace Wpf.ViewModels;
 
 public class ViewModelLocator
 {
-    public MainViewModel MainViewModel => App.ServiceProvider.GetRequiredService<MainViewModel>();
+    public static MainViewModel MainViewModel => App.ServiceProvider.GetRequiredService<MainViewModel>();
 }

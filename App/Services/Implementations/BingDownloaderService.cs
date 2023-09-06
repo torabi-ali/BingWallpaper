@@ -70,11 +70,11 @@ public class BingDownloaderService : IBingDownloaderService
             _applicationDbContext.Images.Add(image);
             await _applicationDbContext.SaveChangesAsync();
 
-            _logger.LogInformation($"Image added with url: {image.Url}");
+            _logger.LogInformation("Image added with url: {imageUrl}", image.Url);
         }
         else
         {
-            _logger.LogInformation($"Image already exists with url: {image.Url}");
+            _logger.LogInformation("Image already exists with url: {imageUrl}", image.Url);
             return null;
         }
 

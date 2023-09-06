@@ -10,6 +10,7 @@
         <OutputType>WinExe</OutputType>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <SatelliteResourceLanguages>En</SatelliteResourceLanguages>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup>
