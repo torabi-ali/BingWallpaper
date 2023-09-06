@@ -2,9 +2,16 @@
 
 public record ApplicationSettings
 {
-    public bool RunOnStartup { get; set; }
+    public ApplicationSettings(bool runOnStartup, int initialLoadingImageCount, string basePath)
+    {
+        RunOnStartup = runOnStartup;
+        InitialLoadingImageCount = initialLoadingImageCount;
+        BasePath = Environment.ExpandEnvironmentVariables(basePath);
+    }
 
-    public int InitialLoadingImageCount { get; set; }
+    public bool RunOnStartup { get; private set; }
 
-    public string BasePath => $"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "BingWallpaper")}";
+    public int InitialLoadingImageCount { get; private set; }
+
+    public string BasePath { get; private set; }
 }
