@@ -7,6 +7,7 @@
         xmlns:helpers="clr-namespace:Wpf.Helpers"
         xmlns:vm="clr-namespace:Wpf.ViewModels"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         helpers:CloseCommand.CloseCommand="{Binding CloseWindowFlag}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
