@@ -6,9 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using System.Globalization;
 using System.IO;
 using System.Windows;
-using Wpf.Utility;
+using System.Windows.Markup;
+using Wpf.Infrastructure;
 using Wpf.ViewModels;
 
 namespace Wpf;
@@ -27,34 +29,27 @@ public partial class App : Application
         ConfigureServices(services);
         ServiceProvider = services.BuildServiceProvider();
 
-        var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate();
-
         var currentDomain = AppDomain.CurrentDomain;
         currentDomain.UnhandledException += CurrentDomain_UnhandledException;
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        SetDefaultCulture();
+
+        MigrateDatabase();
+
+        SetUserSettings();
+
+        base.OnStartup(e);
+    }
+
+    protected void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
         var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
 
-        var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
-        if (settings.RunOnStartup)
-        {
-            NativeMethods.EnableRunOnStartup();
-            logger.LogInformation("Enable run on startup");
-        }
-        else
-        {
-            NativeMethods.DisableRunOnStartup();
-            logger.LogInformation("Disable run on startup");
-        }
-
-        if (!Directory.Exists(settings.BasePath))
-        {
-            Directory.CreateDirectory(settings.BasePath);
-            logger.LogInformation("Create base path directory");
-        }
+        var ex = (Exception)e.ExceptionObject;
+        logger.LogError(ex, "Error from sender: {sender}", sender);
     }
 
     private void ConfigureServices(ServiceCollection services)
@@ -80,11 +75,37 @@ public partial class App : Application
         services.AddSingleton<MainViewModel>();
     }
 
-    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    private void SetDefaultCulture()
     {
-        var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+        var baseCulture = new CultureInfo("en-UK");
+        Thread.CurrentThread.CurrentCulture = baseCulture;
+        Thread.CurrentThread.CurrentUICulture = baseCulture;
+        CultureInfo.DefaultThreadCurrentCulture = baseCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = baseCulture;
+        FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+    }
 
-        var ex = (Exception)e.ExceptionObject;
-        logger.LogError(ex, "Error from sender: {sender}", sender);
+    private void SetUserSettings()
+    {
+        var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
+        if (settings.RunOnStartup)
+        {
+            NativeMethods.EnableRunOnStartup();
+        }
+        else
+        {
+            NativeMethods.DisableRunOnStartup();
+        }
+
+        if (!Directory.Exists(settings.BasePath))
+        {
+            Directory.CreateDirectory(settings.BasePath);
+        }
+    }
+
+    private void MigrateDatabase()
+    {
+        var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
     }
 }

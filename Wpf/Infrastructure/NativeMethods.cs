@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace Wpf.Utility;
+namespace Wpf.Infrastructure;
 
 public static partial class NativeMethods
 {

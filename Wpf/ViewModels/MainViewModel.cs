@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using Wpf.Helpers;
-using Wpf.Utility;
+using Wpf.Infrastructure;
 
 namespace Wpf.ViewModels;
 
