@@ -25,10 +25,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Setup\**" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="logo.ico" />
@@ -37,11 +33,11 @@
     <ItemGroup>
         <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
         <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10" PrivateAssets="all" TreatAsUsed="true" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.3" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
     </ItemGroup>
 
     <ItemGroup>
