@@ -34,6 +34,7 @@
         <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
         <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10" PrivateAssets="all" TreatAsUsed="true" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.10" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
