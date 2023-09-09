@@ -85,6 +85,6 @@ public partial class App : Application
         var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
 
         var ex = (Exception)e.ExceptionObject;
-        logger.LogError(ex, $"Error from sender: {sender}");
+        logger.LogError(ex, "Error from sender: {sender}", sender);
     }
 }
