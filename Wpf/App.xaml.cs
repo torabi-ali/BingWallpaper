@@ -75,7 +75,7 @@ public partial class App : Application
         services.AddSingleton<MainViewModel>();
     }
 
-    private void SetDefaultCulture()
+    private static void SetDefaultCulture()
     {
         var baseCulture = new CultureInfo("en-UK");
         Thread.CurrentThread.CurrentCulture = baseCulture;
@@ -85,7 +85,7 @@ public partial class App : Application
         FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
     }
 
-    private void SetUserSettings()
+    private static void SetUserSettings()
     {
         var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
         if (settings.RunOnStartup)
@@ -103,7 +103,7 @@ public partial class App : Application
         }
     }
 
-    private void MigrateDatabase()
+    private static void MigrateDatabase()
     {
         var dbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.Migrate();
