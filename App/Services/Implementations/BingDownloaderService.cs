@@ -11,14 +11,14 @@ public class BingDownloaderService : IBingDownloaderService
 {
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly ApplicationSettings _settings;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<BingDownloaderService> _logger;
 
-    public BingDownloaderService(ApplicationDbContext applicationDbContext, ApplicationSettings settings, HttpClient httpClient, ILogger<BingDownloaderService> logger)
+    public BingDownloaderService(ApplicationDbContext applicationDbContext, ApplicationSettings settings, IHttpClientFactory httpClientFactory, ILogger<BingDownloaderService> logger)
     {
         _applicationDbContext = applicationDbContext;
         _settings = settings;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 
@@ -37,8 +37,9 @@ public class BingDownloaderService : IBingDownloaderService
 
     private async Task<ImageInfo> GetBingImageAsync(int index)
     {
-        var apiAddress = $"https://bing.com/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
-        var xmlResponse = await _httpClient.GetAsync(apiAddress);
+        var apiAddress = $"/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
+        var httpClient = _httpClientFactory.CreateClient("Default");
+        var xmlResponse = await httpClient.GetAsync(apiAddress);
         if (!xmlResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Error while downloading the xml file from {apiAddress}");
@@ -78,14 +79,15 @@ public class BingDownloaderService : IBingDownloaderService
             return null;
         }
 
-        await DownloadBingImageAsync($"https://bing.com{bingImages.Image.Url}", filePath);
+        await DownloadBingImageAsync(bingImages.Image.Url, filePath);
 
         return image;
     }
 
     private async Task DownloadBingImageAsync(string imageUrl, string imagePath)
     {
-        var fileResponse = await _httpClient.GetAsync(imageUrl);
+        var httpClient = _httpClientFactory.CreateClient("Default");
+        var fileResponse = await httpClient.GetAsync(imageUrl);
         if (!fileResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Error while downloading the image from {imageUrl}");

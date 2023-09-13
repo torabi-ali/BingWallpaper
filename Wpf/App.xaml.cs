@@ -62,7 +62,10 @@ public partial class App : Application
             options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")};");
         }, ServiceLifetime.Singleton);
 
-        services.AddHttpClient();
+        services.AddHttpClient("Default", client =>
+        {
+            client.BaseAddress = new Uri("https://bing.com");
+        });
 
         services.AddLogging(logBuilder =>
         {
@@ -77,7 +80,7 @@ public partial class App : Application
 
     private static void SetDefaultCulture()
     {
-        var baseCulture = new CultureInfo("en-UK");
+        var baseCulture = new CultureInfo("en-GB");
         Thread.CurrentThread.CurrentCulture = baseCulture;
         Thread.CurrentThread.CurrentUICulture = baseCulture;
         CultureInfo.DefaultThreadCurrentCulture = baseCulture;
