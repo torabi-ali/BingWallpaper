@@ -12,7 +12,7 @@
     <a href="https://github.com/torabi-ali/BingWallpaper"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/torabi-ali/BingWallpaper/releases">Download</a>
+    <a href="https://github.com/torabi-ali/BingWallpaper/releases/latest">Download</a>
     ·
     <a href="https://github.com/torabi-ali/BingWallpaper/issues">Report Bug</a>
     ·
