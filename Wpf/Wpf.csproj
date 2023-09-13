@@ -16,25 +16,18 @@
         <Version>2.4.2</Version>
         <Authors>Ali Torabi</Authors>
         <RepositoryType>Git</RepositoryType>
+        <NeutralLanguage>en-GB</NeutralLanguage>
         <AssemblyName>BingWallpaper</AssemblyName>
+        <ApplicationIcon>logo.ico</ApplicationIcon>
         <Copyright>Copyright © Bing Wallpaper</Copyright>
         <RepositoryUrl>https://github.com/torabi-ali/BingWallpaper</RepositoryUrl>
         <Description>BingWallpaper is a windows application developed to download Bing images everday and store it in your local computer.</Description>
-        <PackageIcon>logo.ico</PackageIcon>
-        <ApplicationIcon>logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
         <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
-        <Content Include="logo.ico" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="logo.ico">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
+        <Content Include="logo.ico" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
     <ItemGroup>
@@ -43,7 +36,6 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11" PrivateAssets="all" TreatAsUsed="true" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.11" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
     </ItemGroup>
