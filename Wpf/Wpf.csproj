@@ -13,11 +13,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>2.4.1</Version>
+        <Version>2.4.2</Version>
         <Authors>Ali Torabi</Authors>
         <RepositoryType>Git</RepositoryType>
-        <Copyright>Copyright © Bing Wallpaper</Copyright>
         <AssemblyName>BingWallpaper</AssemblyName>
+        <Copyright>Copyright © Bing Wallpaper</Copyright>
         <RepositoryUrl>https://github.com/torabi-ali/BingWallpaper</RepositoryUrl>
         <Description>BingWallpaper is a windows application developed to download Bing images everday and store it in your local computer.</Description>
         <PackageIcon>logo.ico</PackageIcon>
@@ -28,6 +28,13 @@
         <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="logo.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="logo.ico">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

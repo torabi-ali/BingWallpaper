@@ -1,4 +1,4 @@
-﻿#define MyAppVersion "2.4.1"
+﻿#define MyAppVersion "2.4.2"
 #define MyAppName "BingWallpaper"
 
 [Setup]
@@ -10,7 +10,7 @@ AppPublisher=Ali Torabi
 AppPublisherURL=https://github.com/torabi-ali
 AppSupportURL=https://github.com/torabi-ali/BingWallpaper
 AppUpdatesURL=https://github.com/torabi-ali/BingWallpaper
-DefaultDirName={commonpf}\{#MyAppName}
+DefaultDirName={autopf}\{#MyAppName}
 ArchitecturesInstallIn64BitMode=x64
 DisableDirPage=auto
 DisableProgramGroupPage=auto
@@ -26,7 +26,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "bin\Release\net7.0-windows\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "bin\Release\net7.0-windows\publish\win-x64\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Dirs]
 Name: "{app}"; Permissions: users-full
