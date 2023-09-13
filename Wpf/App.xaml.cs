@@ -88,6 +88,12 @@ public partial class App : Application
     private static void SetUserSettings()
     {
         var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
+
+        if (!Directory.Exists(settings.BasePath))
+        {
+            Directory.CreateDirectory(settings.BasePath);
+        }
+
         if (settings.RunOnStartup)
         {
             NativeMethods.EnableRunOnStartup();
@@ -95,11 +101,6 @@ public partial class App : Application
         else
         {
             NativeMethods.DisableRunOnStartup();
-        }
-
-        if (!Directory.Exists(settings.BasePath))
-        {
-            Directory.CreateDirectory(settings.BasePath);
         }
     }
 
