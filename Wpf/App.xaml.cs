@@ -57,10 +57,7 @@ public partial class App : Application
         var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
         services.AddSingleton(applicationSettings);
 
-        services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")};");
-        }, ServiceLifetime.Singleton);
+        services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlite($"DataSource={Path.Combine(applicationSettings.BasePath, "BingWallpaper.db")}"); }, ServiceLifetime.Singleton);
 
         services.AddHttpClient("Default", client =>
         {
