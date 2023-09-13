@@ -60,7 +60,7 @@ public partial class App : Application
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")};");
-        });
+        }, ServiceLifetime.Singleton);
 
         services.AddHttpClient();
 
