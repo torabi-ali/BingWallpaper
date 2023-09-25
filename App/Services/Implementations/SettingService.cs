@@ -21,6 +21,7 @@ public class SettingService : ISettingService
         if (settings.Count == 0)
         {
             LoadObjectWithDefaultData(applicationSettings);
+            SaveData(applicationSettings);
         }
         else
         {
