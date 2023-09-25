@@ -25,12 +25,11 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
-[Files]
-Source: "bin\Release\net7.0-windows\publish\win-x64\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-
 [Dirs]
 Name: "{app}"; Permissions: users-full
-Name: "{app}\Logs"; Permissions: users-full
+
+[Files]
+Source: "bin\Release\net7.0-windows\publish\win-x64\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"
@@ -41,5 +40,5 @@ Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#MyAppName}
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\Logs"
-Type: filesandordirs; Name: "{app}\{#MyAppName}.db"
+Type: files; Name: "{app}\{#MyAppName}.db"
 
