@@ -24,7 +24,7 @@ public class BingDownloaderService : IBingDownloaderService
 
     public Task<List<ImageInfo>> GetImagesPagedAsync(int pageIndex = 0, int pageSize = 10)
     {
-        return _applicationDbContext.Images.OrderByDescending(p => p.CreatedOn).Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+        return _applicationDbContext.Images.AsNoTracking().OrderByDescending(p => p.CreatedOn).Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
     }
 
     public async Task DownloadWallpapers(int days)
