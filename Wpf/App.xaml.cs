@@ -2,7 +2,6 @@
 using App.Services.Implementations;
 using Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -10,8 +9,8 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Markup;
-using Wpf.Infrastructure;
 using Wpf.ViewModels;
+using Wpf.Views;
 
 namespace Wpf;
 
@@ -19,12 +18,8 @@ public partial class App : Application
 {
     public static IServiceProvider ServiceProvider { get; private set; }
 
-    private readonly IConfiguration _config;
-
     public App()
     {
-        _config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-
         var services = new ServiceCollection();
         ConfigureServices(services);
         ServiceProvider = services.BuildServiceProvider();
@@ -39,8 +34,6 @@ public partial class App : Application
 
         MigrateDatabase();
 
-        SetUserSettings();
-
         base.OnStartup(e);
     }
 
@@ -52,12 +45,9 @@ public partial class App : Application
         logger.LogError(ex, "Error from sender: {sender}", sender);
     }
 
-    private void ConfigureServices(ServiceCollection services)
+    private static void ConfigureServices(ServiceCollection services)
     {
-        var applicationSettings = _config.GetSection("ApplicationSettings").Get<ApplicationSettings>();
-        services.AddSingleton(applicationSettings);
-
-        services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlite($"DataSource={Path.Combine(applicationSettings.BasePath, "BingWallpaper.db")}"); }, ServiceLifetime.Singleton);
+        services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")}"); }, ServiceLifetime.Singleton);
 
         services.AddHttpClient("Default", client =>
         {
@@ -71,8 +61,19 @@ public partial class App : Application
         });
 
         services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
+        services.AddSingleton<ISettingService, SettingService>();
+
+        services.AddSingleton<ApplicationSettings>(opt =>
+        {
+            var settingService = opt.GetService<ISettingService>();
+            return settingService.LoadData();
+        });
 
         services.AddSingleton<MainViewModel>();
+        services.AddSingleton<MainWindow>();
+
+        services.AddSingleton<SettingViewModel>();
+        services.AddSingleton<SettingWindow>();
     }
 
     private static void SetDefaultCulture()
@@ -83,25 +84,6 @@ public partial class App : Application
         CultureInfo.DefaultThreadCurrentCulture = baseCulture;
         CultureInfo.DefaultThreadCurrentUICulture = baseCulture;
         FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
-    }
-
-    private static void SetUserSettings()
-    {
-        var settings = ServiceProvider.GetRequiredService<ApplicationSettings>();
-
-        if (!Directory.Exists(settings.BasePath))
-        {
-            Directory.CreateDirectory(settings.BasePath);
-        }
-
-        if (settings.RunOnStartup)
-        {
-            NativeMethods.EnableRunOnStartup();
-        }
-        else
-        {
-            NativeMethods.DisableRunOnStartup();
-        }
     }
 
     private static void MigrateDatabase()

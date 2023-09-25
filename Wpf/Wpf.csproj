@@ -8,7 +8,6 @@
     <PropertyGroup>
         <UseWPF>true</UseWPF>
         <OutputType>WinExe</OutputType>
-        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <SatelliteResourceLanguages>En</SatelliteResourceLanguages>
     </PropertyGroup>
 
@@ -26,7 +25,6 @@
 
     <ItemGroup>
         <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
-        <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="logo.ico" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
@@ -35,12 +33,11 @@
         <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11" PrivateAssets="all" TreatAsUsed="true" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.11" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\App\App.csproj" />
     </ItemGroup>
+
 </Project>

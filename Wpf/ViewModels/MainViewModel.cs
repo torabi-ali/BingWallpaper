@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows;
 using Wpf.Helpers;
 using Wpf.Infrastructure;
+using Wpf.Views;
 
 namespace Wpf.ViewModels;
 
@@ -62,13 +63,8 @@ public class MainViewModel : BaseViewModel
 
     private void Setting(object parameter)
     {
-        MessageQueue.Enqueue("Please edit this file and restart the app");
-
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = "appsettings.json",
-            UseShellExecute = true
-        });
+        var settingWindow = App.ServiceProvider.GetRequiredService<SettingWindow>();
+        settingWindow.Show();
     }
 
     private void About(object parameter)
