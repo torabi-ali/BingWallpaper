@@ -49,7 +49,7 @@ public class MainViewModel : BaseViewModel
 
     public async void InitializeAsync()
     {
-        await LoadImagesAsync();
+        await Task.Run(LoadImagesAsync);
 
         await Task.Run(DownloadImagesAsync);
     }
@@ -92,17 +92,12 @@ public class MainViewModel : BaseViewModel
         var images = await _bingDownloaderService.GetImagesPagedAsync(pageSize: _applicationSettings.InitialLoadingImageCount);
         foreach (var image in images)
         {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                Images.Add(image);
-            });
+            Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
         }
 
         if (images.Count > 0)
         {
-            Images = new ObservableCollection<ImageInfo>(Images.OrderByDescending(p => p.CreatedOn));
-            RaisePropertyChanged(nameof(Images));
-            SelectedImage = Images.FirstOrDefault();
+            SortImages();
         }
 
         MessageQueue.Clear();
@@ -118,10 +113,25 @@ public class MainViewModel : BaseViewModel
 
         if (days > 0)
         {
-            await _bingDownloaderService.DownloadWallpapers(days);
-            await LoadImagesAsync();
+            for (var i = days - 1; i >= 0; i--)
+            {
+                await Task.Run(async () =>
+                {
+                    var image = await _bingDownloaderService.GetBingImageAsync(i);
+                    Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+                });
+            }
+
+            SortImages();
         }
 
         MessageQueue.Clear();
+    }
+
+    private void SortImages()
+    {
+        Images = new ObservableCollection<ImageInfo>(Images.OrderByDescending(p => p.CreatedOn));
+        RaisePropertyChanged(nameof(Images));
+        SelectedImage = Images.FirstOrDefault();
     }
 }

@@ -27,15 +27,7 @@ public class BingDownloaderService : IBingDownloaderService
         return _applicationDbContext.Images.AsNoTracking().OrderByDescending(p => p.CreatedOn).Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
     }
 
-    public async Task DownloadWallpapers(int days)
-    {
-        for (var i = days - 1; i >= 0; i--)
-        {
-            await GetBingImageAsync(i);
-        }
-    }
-
-    private async Task<ImageInfo> GetBingImageAsync(int index)
+    public async Task<ImageInfo> GetBingImageAsync(int index)
     {
         var apiAddress = $"/HPImageArchive.aspx?format=xml&idx={index}&n=1&mkt=en-US";
         var httpClient = _httpClientFactory.CreateClient("Default");
