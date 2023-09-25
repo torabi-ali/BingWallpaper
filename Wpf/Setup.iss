@@ -1,4 +1,4 @@
-﻿#define MyAppVersion "2.6.1"
+﻿#define MyAppVersion "2.6.2"
 #define MyAppName "BingWallpaper"
 
 [Setup]
@@ -27,6 +27,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Dirs]
 Name: "{app}"; Permissions: users-full
+Name: "{app}\Logs"; Permissions: users-full
 
 [Files]
 Source: "bin\Release\net7.0-windows\publish\win-x64\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
