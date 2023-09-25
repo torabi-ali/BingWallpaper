@@ -6,24 +6,13 @@ public class BaseViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
-    private bool? _closeWindowFlag;
+    public bool CloseWindowFlag { get; set; }
 
-    internal void RaisePropertyChanged(string prop)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-    }
+    internal void RaisePropertyChanged(string property) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
 
-    public bool? CloseWindowFlag
+    internal void CloseWindow()
     {
-        get => _closeWindowFlag; set
-        {
-            _closeWindowFlag = value;
-            RaisePropertyChanged(nameof(CloseWindowFlag));
-        }
-    }
-
-    public virtual void CloseWindow(bool? result = true)
-    {
-        CloseWindowFlag = CloseWindowFlag is null ? true : !CloseWindowFlag;
+        CloseWindowFlag = !CloseWindowFlag;
+        RaisePropertyChanged(nameof(CloseWindowFlag));
     }
 }

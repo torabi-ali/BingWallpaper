@@ -2,10 +2,10 @@
 
 namespace Wpf.Helpers;
 
-public static class CloseCommand
+public static class CloseAction
 {
     public static readonly DependencyProperty CloseCommandProperty =
-        DependencyProperty.RegisterAttached(nameof(CloseCommand), typeof(bool?), typeof(CloseCommand), new PropertyMetadata(OnCloseCommandChanged));
+        DependencyProperty.RegisterAttached("CloseCommand", typeof(bool), typeof(CloseAction), new PropertyMetadata(OnCloseCommandChanged));
 
     private static void OnCloseCommandChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
     {
