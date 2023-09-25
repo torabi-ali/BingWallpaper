@@ -73,11 +73,11 @@ public partial class App : Application
             return applicationSettings;
         });
 
-        services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainWindow>();
+        services.AddTransient<MainViewModel>();
+        services.AddTransient<MainWindow>();
 
-        services.AddSingleton<SettingViewModel>();
-        services.AddSingleton<SettingWindow>();
+        services.AddTransient<SettingViewModel>();
+        services.AddTransient<SettingWindow>();
     }
 
     private static void SetDefaultCulture()
