@@ -41,4 +41,5 @@ Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#MyAppName}
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\Logs"
+Type: filesandordirs; Name: "{app}\{#MyAppName}.db"
 
