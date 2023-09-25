@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Markup;
+using Wpf.Infrastructure;
 using Wpf.ViewModels;
 using Wpf.Views;
 
@@ -66,7 +67,10 @@ public partial class App : Application
         services.AddSingleton<ApplicationSettings>(opt =>
         {
             var settingService = opt.GetService<ISettingService>();
-            return settingService.LoadData();
+            var applicationSettings = settingService.LoadData();
+            applicationSettings.Apply();
+
+            return applicationSettings;
         });
 
         services.AddSingleton<MainViewModel>();

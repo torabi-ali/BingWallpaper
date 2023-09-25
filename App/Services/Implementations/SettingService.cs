@@ -7,18 +7,10 @@ namespace App.Services.Implementations;
 public class SettingService : ISettingService
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IDictionary<string, object> _defaultSettings;
 
     public SettingService(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
-
-        _defaultSettings = new Dictionary<string, object>()
-        {
-            { "RunOnStartup", "true" },
-            { "InitialLoadingImageCount", "10" },
-            { "BasePath", Environment.ExpandEnvironmentVariables(@"%userprofile%\Pictures\BingWallpaper") }
-        };
     }
 
     public ApplicationSettings LoadData()
@@ -26,12 +18,13 @@ public class SettingService : ISettingService
         var applicationSettings = new ApplicationSettings();
         var settings = _dbContext.Settings.AsNoTracking().ToList();
 
-        LoadObject(applicationSettings, settings);
-
-        // Loading for the first time
         if (settings.Count == 0)
         {
-            SaveData(applicationSettings);
+            LoadObjectWithDefaultData(applicationSettings);
+        }
+        else
+        {
+            LoadObject(applicationSettings, settings);
         }
 
         return applicationSettings;
@@ -51,7 +44,24 @@ public class SettingService : ISettingService
         var properties = applicationSettings.GetType().GetProperties();
         foreach (var property in properties)
         {
-            var value = settings.Where(p => p.Key.Equals(property.Name)).Select(p => p.Value).SingleOrDefault() ?? _defaultSettings.Where(p => p.Key.Equals(property.Name)).Select(p => p.Value).SingleOrDefault();
+            var value = settings.Where(p => p.Key.Equals(property.Name)).Select(p => p.Value).SingleOrDefault();
+            property.SetValue(applicationSettings, Convert.ChangeType(value, property.PropertyType), null);
+        }
+    }
+
+    private void LoadObjectWithDefaultData(ApplicationSettings applicationSettings)
+    {
+        var defaultSettings = new Dictionary<string, object>()
+        {
+            { "RunOnStartup", "true" },
+            { "InitialLoadingImageCount", "10" },
+            { "BasePath", Environment.ExpandEnvironmentVariables(@"%userprofile%\Pictures\BingWallpaper") }
+        };
+
+        var properties = applicationSettings.GetType().GetProperties();
+        foreach (var property in properties)
+        {
+            var value = defaultSettings.Where(p => p.Key.Equals(property.Name)).Select(p => p.Value).SingleOrDefault();
             property.SetValue(applicationSettings, Convert.ChangeType(value, property.PropertyType), null);
         }
     }

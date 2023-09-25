@@ -29,29 +29,12 @@ public class SettingViewModel : BaseViewModel
     {
         _settingService.SaveData(ApplicationSettings);
 
-        ApplyUserSettings();
+        ApplicationSettings.Apply();
         CloseWindow();
     }
 
     private void Close(object parameter)
     {
         CloseWindow();
-    }
-
-    private void ApplyUserSettings()
-    {
-        if (!Directory.Exists(ApplicationSettings.BasePath))
-        {
-            Directory.CreateDirectory(ApplicationSettings.BasePath);
-        }
-
-        if (ApplicationSettings.RunOnStartup)
-        {
-            NativeMethods.EnableRunOnStartup();
-        }
-        else
-        {
-            NativeMethods.DisableRunOnStartup();
-        }
     }
 }
