@@ -1,6 +1,5 @@
 ﻿using App.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
 using Wpf.Helpers;
 using Wpf.Infrastructure;
 
