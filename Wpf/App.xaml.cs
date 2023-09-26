@@ -1,4 +1,5 @@
-﻿using App.Services;
+﻿using App.Dtos;
+using App.Services;
 using App.Services.Implementations;
 using Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,7 @@ public partial class App : Application
         var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
 
         var ex = (Exception)e.ExceptionObject;
-        logger.LogError(ex, "Error from sender: {sender}", sender);
+        logger.LogError(ex, "Unhandled Exception");
     }
 
     private static void ConfigureServices(ServiceCollection services)

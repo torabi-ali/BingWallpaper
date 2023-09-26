@@ -1,4 +1,5 @@
-﻿using App.Services;
+﻿using App.Dtos;
+using App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Wpf.Helpers;
 using Wpf.Infrastructure;

@@ -1,4 +1,6 @@
-﻿namespace App.Services;
+﻿using App.Dtos;
+
+namespace App.Services;
 
 public interface ISettingService
 {
