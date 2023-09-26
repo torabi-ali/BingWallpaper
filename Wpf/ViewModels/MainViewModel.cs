@@ -1,4 +1,5 @@
-﻿using App.Services;
+﻿using App.Dtos;
+using App.Services;
 using Data.Models;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
@@ -118,7 +119,10 @@ public class MainViewModel : BaseViewModel
                 await Task.Run(async () =>
                 {
                     var image = await _bingDownloaderService.GetBingImageAsync(i);
-                    Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+                    if (image is not null)
+                    {
+                        Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+                    }
                 });
             }
 
