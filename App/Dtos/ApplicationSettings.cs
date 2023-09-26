@@ -1,4 +1,4 @@
-﻿namespace App.Services;
+﻿namespace App.Dtos;
 
 public record ApplicationSettings
 {
