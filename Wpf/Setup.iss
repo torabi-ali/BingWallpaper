@@ -1,4 +1,4 @@
-﻿#define MyAppVersion "2.6.3"
+﻿#define MyAppVersion "2.7.0"
 #define MyAppName "BingWallpaper"
 
 [Setup]
@@ -30,7 +30,7 @@ Name: "{app}"; Permissions: users-full
 Name: "{app}\Logs"; Permissions: users-full
 
 [Files]
-Source: "bin\Release\net7.0-windows\publish\win-x64\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "bin\Release\net8.0-windows\publish\win-x64\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"
