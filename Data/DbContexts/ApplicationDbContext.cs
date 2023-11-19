@@ -1,20 +1,17 @@
-﻿using Data.Models;
+using Data.Models;
 using Data.Models.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.DbContexts;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    { }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.ApplyConfiguration(new ImageInfoConfiguration());
-        modelBuilder.ApplyConfiguration(new SettingConfiguration());
+        builder.ApplyConfiguration(new ImageInfoConfiguration());
+        builder.ApplyConfiguration(new SettingConfiguration());
 
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(builder);
     }
 
     public DbSet<ImageInfo> Images { get; set; }

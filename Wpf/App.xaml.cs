@@ -1,4 +1,7 @@
-﻿using App.Dtos;
+using System.Globalization;
+using System.IO;
+using System.Windows;
+using System.Windows.Markup;
 using App.Services;
 using App.Services.Implementations;
 using Data.DbContexts;
@@ -6,10 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using System.Globalization;
-using System.IO;
-using System.Windows;
-using System.Windows.Markup;
 using Wpf.Infrastructure;
 using Wpf.ViewModels;
 using Wpf.Views;
@@ -49,12 +48,9 @@ public partial class App : Application
 
     private static void ConfigureServices(ServiceCollection services)
     {
-        services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")}"); }, ServiceLifetime.Singleton);
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"DataSource={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BingWallpaper.db")}"), ServiceLifetime.Singleton);
 
-        services.AddHttpClient("Default", client =>
-        {
-            client.BaseAddress = new Uri("https://bing.com");
-        });
+        services.AddHttpClient("Default", client => client.BaseAddress = new Uri("https://bing.com"));
 
         services.AddLogging(logBuilder =>
         {
@@ -65,7 +61,7 @@ public partial class App : Application
         services.AddSingleton<IBingDownloaderService, BingDownloaderService>();
         services.AddSingleton<ISettingService, SettingService>();
 
-        services.AddSingleton<ApplicationSettings>(opt =>
+        services.AddSingleton(opt =>
         {
             var settingService = opt.GetService<ISettingService>();
             var applicationSettings = settingService.LoadData();

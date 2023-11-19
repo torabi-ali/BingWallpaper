@@ -1,23 +1,16 @@
-﻿using App.Dtos;
+using App.Dtos;
 using Data.DbContexts;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Services.Implementations;
 
-public class SettingService : ISettingService
+public class SettingService(ApplicationDbContext dbContext) : ISettingService
 {
-    private readonly ApplicationDbContext _dbContext;
-
-    public SettingService(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public ApplicationSettings LoadData()
     {
         var applicationSettings = new ApplicationSettings();
-        var settings = _dbContext.Settings.AsNoTracking().ToList();
+        var settings = dbContext.Settings.AsNoTracking().ToList();
 
         if (settings.Count == 0)
         {
@@ -34,14 +27,14 @@ public class SettingService : ISettingService
 
     public void SaveData(ApplicationSettings applicationSettings)
     {
-        var settings = _dbContext.Settings.ToList();
+        var settings = dbContext.Settings.ToList();
 
         UnLoadObject(applicationSettings, settings);
 
-        _dbContext.SaveChanges();
+        dbContext.SaveChanges();
     }
 
-    private void LoadObject(ApplicationSettings applicationSettings, IEnumerable<Setting> settings)
+    private static void LoadObject(ApplicationSettings applicationSettings, IEnumerable<Setting> settings)
     {
         var properties = applicationSettings.GetType().GetProperties();
         foreach (var property in properties)
@@ -51,7 +44,7 @@ public class SettingService : ISettingService
         }
     }
 
-    private void LoadObjectWithDefaultData(ApplicationSettings applicationSettings)
+    private static void LoadObjectWithDefaultData(ApplicationSettings applicationSettings)
     {
         var defaultSettings = new Dictionary<string, object>()
         {
@@ -78,12 +71,12 @@ public class SettingService : ISettingService
             if (row is null)
             {
                 row = new Setting { Key = property.Name, Value = value.ToString() };
-                _dbContext.Settings.Add(row);
+                dbContext.Settings.Add(row);
             }
             else
             {
                 row.Value = value.ToString();
-                _dbContext.Settings.Update(row);
+                dbContext.Settings.Update(row);
             }
         }
     }

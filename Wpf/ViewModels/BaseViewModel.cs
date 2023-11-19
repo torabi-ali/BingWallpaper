@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace Wpf.ViewModels;
 
@@ -8,7 +8,10 @@ public class BaseViewModel : INotifyPropertyChanged
 
     public bool CloseWindowFlag { get; set; }
 
-    internal void RaisePropertyChanged(string property) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+    internal void RaisePropertyChanged(string property)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+    }
 
     internal void CloseWindow()
     {

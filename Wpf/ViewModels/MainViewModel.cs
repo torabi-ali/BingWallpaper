@@ -1,11 +1,11 @@
-﻿using App.Dtos;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
+using App.Dtos;
 using App.Services;
 using Data.Models;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows;
 using Wpf.Helpers;
 using Wpf.Infrastructure;
 using Wpf.Views;
@@ -16,8 +16,8 @@ public class MainViewModel : BaseViewModel
 {
     private const int BING_IMAGE_AVAILABLE_DAYS = 7;
 
-    private readonly ApplicationSettings _applicationSettings;
-    private readonly IBingDownloaderService _bingDownloaderService;
+    private readonly ApplicationSettings applicationSettings;
+    private readonly IBingDownloaderService bingDownloaderService;
 
     public static SnackbarMessageQueue MessageQueue { get; private set; }
 
@@ -31,13 +31,13 @@ public class MainViewModel : BaseViewModel
 
     public ObservableCollection<ImageInfo> Images { get; set; }
 
-    private ImageInfo _selectedImage;
-    public ImageInfo SelectedImage { get => _selectedImage; set { _selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
+    private ImageInfo selectedImage;
+    public ImageInfo SelectedImage { get => selectedImage; set { selectedImage = value; RaisePropertyChanged(nameof(SelectedImage)); } }
 
     public MainViewModel()
     {
-        _applicationSettings = App.ServiceProvider.GetRequiredService<ApplicationSettings>();
-        _bingDownloaderService = App.ServiceProvider.GetRequiredService<IBingDownloaderService>();
+        applicationSettings = App.ServiceProvider.GetRequiredService<ApplicationSettings>();
+        bingDownloaderService = App.ServiceProvider.GetRequiredService<IBingDownloaderService>();
         MessageQueue = new SnackbarMessageQueue();
 
         SetWallpaperCommand = new RelayCommand(SetWallpaper);
@@ -89,11 +89,12 @@ public class MainViewModel : BaseViewModel
     {
         MessageQueue.Enqueue("Loading Wallpapers ...");
 
-        Images = new ObservableCollection<ImageInfo>();
-        var images = await _bingDownloaderService.GetImagesPagedAsync(pageSize: _applicationSettings.InitialLoadingImageCount);
+        Images = [];
+        var images = await bingDownloaderService.GetImagesPagedAsync(pageSize: applicationSettings.InitialLoadingImageCount);
         foreach (var image in images)
         {
-            Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+            Application.Current.Dispatcher.Invoke(delegate
+            { Images.Add(image); });
         }
 
         if (images.Count > 0)
@@ -118,10 +119,11 @@ public class MainViewModel : BaseViewModel
             {
                 await Task.Run(async () =>
                 {
-                    var image = await _bingDownloaderService.GetBingImageAsync(i);
+                    var image = await bingDownloaderService.GetBingImageAsync(i);
                     if (image is not null)
                     {
-                        Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+                        Application.Current.Dispatcher.Invoke(delegate
+                        { Images.Add(image); });
                     }
                 });
             }

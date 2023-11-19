@@ -1,4 +1,4 @@
-﻿using App.Dtos;
+using App.Dtos;
 using App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Wpf.Helpers;
@@ -8,7 +8,7 @@ namespace Wpf.ViewModels;
 
 public class SettingViewModel : BaseViewModel
 {
-    private readonly ISettingService _settingService;
+    private readonly ISettingService settingService;
 
     public ApplicationSettings ApplicationSettings { get; private set; }
 
@@ -18,7 +18,7 @@ public class SettingViewModel : BaseViewModel
 
     public SettingViewModel()
     {
-        _settingService = App.ServiceProvider.GetRequiredService<ISettingService>();
+        settingService = App.ServiceProvider.GetRequiredService<ISettingService>();
         ApplicationSettings = App.ServiceProvider.GetRequiredService<ApplicationSettings>();
 
         SaveCommand = new RelayCommand(SaveSettings);
@@ -27,7 +27,7 @@ public class SettingViewModel : BaseViewModel
 
     private void SaveSettings(object parameter)
     {
-        _settingService.SaveData(ApplicationSettings);
+        settingService.SaveData(ApplicationSettings);
 
         ApplicationSettings.Apply();
         CloseWindow();
