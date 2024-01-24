@@ -1,43 +1,43 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0-windows</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <UseWPF>true</UseWPF>
-        <OutputType>WinExe</OutputType>
-        <SatelliteResourceLanguages>En</SatelliteResourceLanguages>
-    </PropertyGroup>
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+    <OutputType>WinExe</OutputType>
+    <SatelliteResourceLanguages>En</SatelliteResourceLanguages>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <Version>2.7.1</Version>
-        <Authors>Ali Torabi</Authors>
-        <RepositoryType>Git</RepositoryType>
-        <NeutralLanguage>en-GB</NeutralLanguage>
-        <AssemblyName>BingWallpaper</AssemblyName>
-        <ApplicationIcon>logo.ico</ApplicationIcon>
-        <Copyright>Copyright © Bing Wallpaper</Copyright>
-        <RepositoryUrl>https://github.com/torabi-ali/BingWallpaper</RepositoryUrl>
-        <Description>BingWallpaper is a windows application developed to download Bing images everday and store it in your local computer.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <Version>2.7.2</Version>
+    <Authors>Ali Torabi</Authors>
+    <RepositoryType>Git</RepositoryType>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <AssemblyName>BingWallpaper</AssemblyName>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <Copyright>Copyright © Bing Wallpaper</Copyright>
+    <RepositoryUrl>https://github.com/torabi-ali/BingWallpaper</RepositoryUrl>
+    <Description>BingWallpaper is a windows application developed to download Bing images everday and store it in your local computer.</Description>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
-        <Content Include="logo.ico" CopyToOutputDirectory="PreserveNewest" />
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="logo.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
-        <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" PrivateAssets="all" TreatAsUsed="true" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1" PrivateAssets="all" TreatAsUsed="true" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\App\App.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\App\App.csproj" />
+  </ItemGroup>
 
 </Project>
