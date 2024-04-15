@@ -48,10 +48,11 @@ public class MainViewModel : BaseViewModel
         InitializeAsync();
     }
 
-    // Just a wrapper to change return type from "Task" to "void"
     public async void InitializeAsync()
     {
-        await DownloadImagesAsync();
+        await Task.Run(LoadImagesAsync);
+
+        await Task.Run(DownloadImagesAsync);
     }
 
     private void SetWallpaper(object parameter)
@@ -84,6 +85,25 @@ public class MainViewModel : BaseViewModel
         CloseWindow();
     }
 
+    private async Task LoadImagesAsync()
+    {
+        MessageQueue.Enqueue("Loading Wallpapers ...");
+
+        Images = [];
+        var images = await bingDownloaderService.GetImagesPagedAsync(pageSize: applicationSettings.InitialLoadingImageCount);
+        foreach (var image in images)
+        {
+            Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+        }
+
+        if (images.Count > 0)
+        {
+            SortImages();
+        }
+
+        MessageQueue.Clear();
+    }
+
     private async Task DownloadImagesAsync()
     {
         MessageQueue.Enqueue("Downloading New Wallpapers ...");
@@ -94,31 +114,28 @@ public class MainViewModel : BaseViewModel
 
         if (days > 0)
         {
-            var downloaderTasks = new List<Task>();
             for (var i = days - 1; i >= 0; i--)
             {
-                var task = bingDownloaderService.GetBingImageAsync(i);
-                downloaderTasks.Add(task);
+                await Task.Run(async () =>
+                {
+                    var image = await bingDownloaderService.GetBingImageAsync(i);
+                    if (image is not null)
+                    {
+                        Application.Current.Dispatcher.Invoke(delegate { Images.Add(image); });
+                    }
+                });
             }
 
-            await Task.WhenAll(downloaderTasks);
+            SortImages();
         }
-
-        await LoadImagesAsync();
 
         MessageQueue.Clear();
     }
 
-    private async Task LoadImagesAsync()
+    private void SortImages()
     {
-        Images = [];
-        var images = await bingDownloaderService.GetImagesPagedAsync(pageSize: applicationSettings.InitialLoadingImageCount);
-        foreach (var image in images)
-        {
-            Application.Current.Dispatcher.Invoke(delegate
-            { Images.Add(image); });
-        }
-
+        Images = new ObservableCollection<ImageInfo>(Images.OrderByDescending(p => p.CreatedOn));
+        RaisePropertyChanged(nameof(Images));
         SelectedImage = Images.FirstOrDefault();
     }
 }
