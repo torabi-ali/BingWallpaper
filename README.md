@@ -31,11 +31,11 @@ This project is a long-standing hobby of mine. It automatically downloads the Bi
 
 ### Built With
 
-The project originally was written by .NET Framework. I tried to migrate to .NET 7 as a playground and have some fun with it which turned out supoer fun.
+The project originally was written by .NET Framework. I tried to migrate to .NET 8 as a playground and have some fun with it which turned out supoer fun.
 
 
 * MVVM Architecture
-* .NET 7
+* .NET 8
 * SQLite
 * MaterialUI
 * NLog
