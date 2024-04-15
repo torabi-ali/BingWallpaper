@@ -100,13 +100,10 @@ public class MainViewModel : BaseViewModel
         {
             SortImages();
         }
-
-        MessageQueue.Clear();
     }
 
     private async Task DownloadImagesAsync()
     {
-        MessageQueue.Enqueue("Downloading New Wallpapers ...");
 
         var days = SelectedImage is null
             ? BING_IMAGE_AVAILABLE_DAYS
@@ -116,6 +113,9 @@ public class MainViewModel : BaseViewModel
         {
             for (var i = days - 1; i >= 0; i--)
             {
+                MessageQueue.Clear();
+                MessageQueue.Enqueue("Downloading New Wallpapers ...");
+
                 await Task.Run(async () =>
                 {
                     var image = await bingDownloaderService.GetBingImageAsync(i);
@@ -129,7 +129,6 @@ public class MainViewModel : BaseViewModel
             SortImages();
         }
 
-        MessageQueue.Clear();
     }
 
     private void SortImages()
