@@ -6,6 +6,7 @@ using App.Services;
 using Data.Models;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Wpf.Helpers;
 using Wpf.Infrastructure;
 using Wpf.Views;
@@ -18,6 +19,7 @@ public class MainViewModel : BaseViewModel
 
     private readonly ApplicationSettings applicationSettings;
     private readonly IBingDownloaderService bingDownloaderService;
+    private readonly ILogger<MainViewModel> logger;
 
     public static SnackbarMessageQueue MessageQueue { get; private set; }
 
@@ -38,6 +40,7 @@ public class MainViewModel : BaseViewModel
     {
         applicationSettings = App.ServiceProvider.GetRequiredService<ApplicationSettings>();
         bingDownloaderService = App.ServiceProvider.GetRequiredService<IBingDownloaderService>();
+        logger = App.ServiceProvider.GetRequiredService<ILogger<MainViewModel>>();
         MessageQueue = new SnackbarMessageQueue();
 
         SetWallpaperCommand = new RelayCommand(SetWallpaper);
@@ -50,9 +53,25 @@ public class MainViewModel : BaseViewModel
 
     public async void InitializeAsync()
     {
-        await Task.Run(LoadImagesAsync);
+        try
+        {
+            await Task.Run(LoadImagesAsync);
+        }
+        catch (Exception ex)
+        {
+            MessageQueue.Enqueue("Error while loading images.");
+            logger.LogError(ex, "Error while loading images.");
+        }
 
-        await Task.Run(DownloadImagesAsync);
+        try
+        {
+            await Task.Run(DownloadImagesAsync);
+        }
+        catch (Exception ex)
+        {
+            MessageQueue.Enqueue("Error while downloading new images.");
+            logger.LogError(ex, "Error while downloading new images.");
+        }
     }
 
     private void SetWallpaper(object parameter)
@@ -104,7 +123,6 @@ public class MainViewModel : BaseViewModel
 
     private async Task DownloadImagesAsync()
     {
-
         var days = SelectedImage is null
             ? BING_IMAGE_AVAILABLE_DAYS
             : Math.Min((DateTime.Today - SelectedImage.CreatedOn).Days, BING_IMAGE_AVAILABLE_DAYS);
@@ -128,7 +146,6 @@ public class MainViewModel : BaseViewModel
 
             SortImages();
         }
-
     }
 
     private void SortImages()
