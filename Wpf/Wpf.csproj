@@ -31,9 +31,9 @@
   <ItemGroup>
     <PackageReference Include="MaterialDesignColors" Version="3.0.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4" PrivateAssets="all" TreatAsUsed="true" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6" PrivateAssets="all" TreatAsUsed="true" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
   </ItemGroup>
 
   <ItemGroup>
