@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.8.0</Version>
+    <Version>2.8.1</Version>
     <Authors>Ali Torabi</Authors>
     <RepositoryType>Git</RepositoryType>
     <NeutralLanguage>en-GB</NeutralLanguage>
