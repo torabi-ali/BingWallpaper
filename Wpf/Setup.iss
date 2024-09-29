@@ -1,4 +1,4 @@
-#define MyAppVersion "2.8.1"
+#define MyAppVersion "2.8.2"
 #define MyAppName "BingWallpaper"
 
 [Setup]
@@ -11,7 +11,7 @@ AppPublisherURL=https://github.com/torabi-ali
 AppSupportURL=https://github.com/torabi-ali/BingWallpaper
 AppUpdatesURL=https://github.com/torabi-ali/BingWallpaper
 DefaultDirName={autopf}\{#MyAppName}
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesInstallIn64BitMode=x64os
 DisableDirPage=auto
 DisableProgramGroupPage=auto
 OutputDir=Setup
